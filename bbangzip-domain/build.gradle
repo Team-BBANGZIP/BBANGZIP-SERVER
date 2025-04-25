@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(":bbangzip-auth")
+    implementation project(":bbangzip-external")
+    implementation project(":bbangzip-common")
+}
+
+bootJar { enabled = false }
+jar { enabled = true }

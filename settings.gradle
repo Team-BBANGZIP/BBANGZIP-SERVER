@@ -1,1 +1,6 @@
 rootProject.name = 'bbangzip'
+include 'bbangzip-api'
+include 'bbangzip-auth'
+include 'bbangzip-common'
+include 'bbangzip-domain'
+include 'bbangzip-external'
