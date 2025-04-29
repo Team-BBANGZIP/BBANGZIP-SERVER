@@ -1,7 +1,17 @@
 dependencies {
-    implementation project(":bbangzip-auth")
     implementation project(":bbangzip-external")
     implementation project(":bbangzip-common")
+
+    //JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Open Feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.2.0'
 }
 
 bootJar { enabled = false }
