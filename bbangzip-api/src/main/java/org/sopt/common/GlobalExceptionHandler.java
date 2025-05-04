@@ -1,5 +1,6 @@
 package org.sopt.common;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.code.ErrorCode;
 import org.sopt.code.GlobalErrorCode;
 import org.sopt.response.BaseResponse;
@@ -13,12 +14,15 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // @Valid 실패 시 예외
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseResponse<Map<String, String>>> handleValidationException(MethodArgumentNotValidException e) {
+        log.warn("[ValidationException] {}", e.getMessage());
+
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getFieldErrors().forEach(err ->
                 errors.put(err.getField(), err.getDefaultMessage())
@@ -36,6 +40,8 @@ public class GlobalExceptionHandler {
                 ? GlobalErrorCode.METHOD_NOT_ALLOWED
                 : GlobalErrorCode.NOT_FOUND_END_POINT;
 
+        log.warn("[NoHandlerFound] {} - {}", errorCode.getMessage(), e.getMessage());
+
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(BaseResponse.fail(errorCode));
@@ -44,6 +50,8 @@ public class GlobalExceptionHandler {
     // 기본 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<Void>> handleException(Exception e){
+        log.error("[UnhandledException]", e);
+
         return ResponseEntity
                 .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
                 .body(BaseResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR));
