@@ -2,11 +2,8 @@ dependencies {
     implementation project(":bbangzip-external")
     implementation project(":bbangzip-common")
 
-    // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    // Open Feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.2.0'
+    // database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
 bootJar { enabled = false }
