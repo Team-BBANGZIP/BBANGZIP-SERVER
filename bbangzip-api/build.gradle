@@ -4,9 +4,16 @@ plugins {
 
 dependencies {
     implementation project(":bbangzip-domain")
-    implementation project(":bbangzip-auth")
     implementation project(":bbangzip-external")
     implementation project(":bbangzip-common")
+
+    //Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 }
 
 bootJar { enabled = true } // dependencies 와 class 파일 모두 묶어서 빌드
