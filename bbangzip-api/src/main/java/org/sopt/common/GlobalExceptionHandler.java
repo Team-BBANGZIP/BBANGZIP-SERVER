@@ -1,6 +1,7 @@
 package org.sopt.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.auth.exception.BbangzipAuthException;
 import org.sopt.code.ErrorCode;
 import org.sopt.code.GlobalErrorCode;
 import org.sopt.response.BaseResponse;
@@ -17,6 +18,16 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(BbangzipAuthException.class)
+    public ResponseEntity<BaseResponse<Void>> handleAuthException(BbangzipAuthException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        log.warn("[AuthException] {} - {}", errorCode.getMessage(), e.getMessage());
+
+        return ResponseEntity
+                .status(e.getStatus())
+                .body(BaseResponse.fail(errorCode));
+    }
 
     // @Valid 실패 시 예외
     @ExceptionHandler(MethodArgumentNotValidException.class)
