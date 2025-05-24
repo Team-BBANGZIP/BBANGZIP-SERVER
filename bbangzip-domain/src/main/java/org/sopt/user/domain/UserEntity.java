@@ -11,7 +11,7 @@ import static org.sopt.user.domain.UserTableConstants.*;
 @Entity
 @Getter
 @Table(name = TABLE_USER)
-@NoArgsConstructor(access= AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity extends BaseTimeEntity {
 
     @Id
@@ -25,12 +25,23 @@ public class UserEntity extends BaseTimeEntity {
     @Column(name = COLUMN_PLATFORM, nullable = false)
     private String platform;
 
-    @Column(name = NICKNAME)
+    @Column(name = COLUMN_NICKNAME, nullable = false)
     private String nickname;
 
-    public UserEntity(Long platformUserId, String platform, String nickname) {
-        this.platformUserId = platformUserId;
-        this.platform = platform;
-        this.nickname = nickname;
-    }
+    @Column(name = COLUMN_PROFILE_IMAGE)
+    private String profileImage;
+
+    @Column(name = COLUMN_COMMITMENT_MESSAGE)
+    private String commitmentMessage;
+
+    @Column(name = COLUMN_NOTIFICATION_ENABLED, nullable = false)
+    private Boolean notificationEnabled;
+
+    @Column(name = COLUMN_WEEK_START, nullable = false)
+    private String weekStart;
+
+    @Column(name = COLUMN_TOTAL_BREAD_COUNT, nullable = false)
+    private int totalBreadCount;
+
+
 }
