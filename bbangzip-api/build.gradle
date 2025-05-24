@@ -2,10 +2,16 @@ plugins {
     id 'org.springframework.boot'
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation project(":bbangzip-domain")
     implementation project(":bbangzip-external")
     implementation project(":bbangzip-common")
+
+    implementation 'mysql:mysql-connector-java:8.0.33'
 
     //Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
