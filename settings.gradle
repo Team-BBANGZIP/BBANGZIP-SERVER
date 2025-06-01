@@ -4,3 +4,5 @@ include 'bbangzip-auth'
 include 'bbangzip-common'
 include 'bbangzip-domain'
 include 'bbangzip-external'
+include 'bbangzip-auth'
+

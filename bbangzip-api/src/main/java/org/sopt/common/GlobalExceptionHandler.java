@@ -1,9 +1,9 @@
 package org.sopt.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.auth.exception.BbangzipAuthException;
 import org.sopt.code.ErrorCode;
 import org.sopt.code.GlobalErrorCode;
+import org.sopt.exception.BbangzipAuthException;
 import org.sopt.response.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
