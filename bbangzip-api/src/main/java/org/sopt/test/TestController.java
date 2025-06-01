@@ -3,9 +3,9 @@ package org.sopt.test;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import org.sopt.auth.annotation.UserId;
-import org.sopt.auth.jwt.JwtTokenProvider;
-import org.sopt.auth.jwt.dto.JwtTokensDto;
+import org.sopt.annotation.UserId;
+import org.sopt.jwt.JwtTokenProvider;
+import org.sopt.jwt.dto.JwtTokensDto;
 import org.sopt.user.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
