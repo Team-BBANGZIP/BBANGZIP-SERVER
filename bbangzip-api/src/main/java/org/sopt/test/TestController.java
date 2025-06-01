@@ -2,6 +2,7 @@ package org.sopt.test;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.sopt.auth.annotation.UserId;
 import org.sopt.auth.jwt.JwtTokenProvider;
 import org.sopt.auth.jwt.dto.JwtTokensDto;
