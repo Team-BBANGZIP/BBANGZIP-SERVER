@@ -4,10 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.auth.exception.BbangzipAuthException;
 import org.sopt.code.ErrorCode;
 import org.sopt.code.GlobalErrorCode;
 import org.sopt.exception.BaseException;
+import org.sopt.exception.BbangzipAuthException;
 import org.sopt.response.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
         log.warn("[AuthException] {} - {}", errorCode.getMessage(), e.getMessage());
 
         return ResponseEntity
-                .status(e.getStatus())
-                .body(BaseResponse.fail(errorCode));
+            .status(e.getStatus())
+            .body(BaseResponse.fail(errorCode));
     }
 
     // @Valid 실패 시 예외
@@ -40,26 +40,26 @@ public class GlobalExceptionHandler {
 
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getFieldErrors().forEach(err ->
-                errors.put(err.getField(), err.getDefaultMessage())
+            errors.put(err.getField(), err.getDefaultMessage())
         );
 
         return ResponseEntity
-                .status(GlobalErrorCode.INVALID_INPUT_VALUE.getHttpStatus())
-                .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE.getCode(), errors));
+            .status(GlobalErrorCode.INVALID_INPUT_VALUE.getHttpStatus())
+            .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE.getCode(), errors));
     }
 
     // 존재하지 않는 요청에 대한 예외
     @ExceptionHandler(value = {NoHandlerFoundException.class, HttpRequestMethodNotSupportedException.class})
     public ResponseEntity<BaseResponse<Void>> handleNoPageFoundException(Exception e) {
         ErrorCode errorCode = e instanceof HttpRequestMethodNotSupportedException
-                ? GlobalErrorCode.METHOD_NOT_ALLOWED
-                : GlobalErrorCode.NOT_FOUND_END_POINT;
+            ? GlobalErrorCode.METHOD_NOT_ALLOWED
+            : GlobalErrorCode.NOT_FOUND_END_POINT;
 
         log.warn("[NoHandlerFound] {} - {}", errorCode.getMessage(), e.getMessage());
 
         return ResponseEntity
-                .status(errorCode.getHttpStatus())
-                .body(BaseResponse.fail(errorCode));
+            .status(errorCode.getHttpStatus())
+            .body(BaseResponse.fail(errorCode));
     }
 
     // 필수 요청 파라미터 누락
@@ -111,7 +111,7 @@ public class GlobalExceptionHandler {
         log.error("[UnhandledException]", e);
 
         return ResponseEntity
-                .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
-                .body(BaseResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR));
+            .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
+            .body(BaseResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR));
     }
 }
