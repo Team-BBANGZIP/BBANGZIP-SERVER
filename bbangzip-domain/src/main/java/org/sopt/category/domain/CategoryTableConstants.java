@@ -7,5 +7,5 @@ public class CategoryTableConstants {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_COLOR = "color";
     public static final String COLUMN_IS_VISIBLE = "is_visible";
-    public static final String COLUMN_ORDER = "order";
+    public static final String COLUMN_ORDER = "order_index";
 }
