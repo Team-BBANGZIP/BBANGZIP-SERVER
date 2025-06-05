@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    image: ${DOCKER_IMAGE_NAME_DEV}  # 시크릿에서 넘겨받은 환경변수 사용
+    container_name: bbangzip-app
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    networks:
+      - bbangzip-network
+
+networks:
+  bbangzip-network:
+    driver: bridge
