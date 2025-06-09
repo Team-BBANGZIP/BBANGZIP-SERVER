@@ -50,6 +50,9 @@ jobs:
 
     steps:
       # 7. EC2에 docker-compose-dev.yml 업로드
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Upload docker-compose to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
