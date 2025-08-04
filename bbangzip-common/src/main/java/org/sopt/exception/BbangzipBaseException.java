@@ -3,15 +3,15 @@ package org.sopt.exception;
 import org.sopt.code.ErrorCode;
 import org.springframework.http.HttpStatus;
 
-public abstract class BaseException extends RuntimeException {
+public abstract class BbangzipBaseException extends RuntimeException {
     private final ErrorCode errorCode;
 
-    protected BaseException(ErrorCode errorCode) {
+    protected BbangzipBaseException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 
-    protected BaseException(ErrorCode errorCode, String detailMessage) {
+    protected BbangzipBaseException(ErrorCode errorCode, String detailMessage) {
         super(detailMessage);
         this.errorCode = errorCode;
     }
