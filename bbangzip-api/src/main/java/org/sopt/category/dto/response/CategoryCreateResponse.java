@@ -7,14 +7,14 @@ public record CategoryCreateResponse(
     Long categoryId,
     String name,
     CategoryColor color,
-    Boolean isVisible
+    boolean isVisible
 ) {
   public static CategoryCreateResponse from(Category category) {
     return new CategoryCreateResponse(
         category.getId(),
         category.getName(),
         category.getColor(),
-        category.getIsVisible()
+        category.isVisible()
     );
   }
 }

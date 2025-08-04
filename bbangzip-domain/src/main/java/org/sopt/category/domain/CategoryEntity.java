@@ -49,13 +49,13 @@ public class CategoryEntity extends BaseTimeEntity {
     private CategoryColor color;
 
     @Column(name = COLUMN_IS_VISIBLE, nullable = false)
-    private Boolean isVisible;
+    private boolean isVisible;
 
     @Column(name = COLUMN_ORDER, nullable = false)
     private int order;
 
     @Builder
-    private CategoryEntity(UserEntity user, String name, CategoryColor color, Boolean isVisible, int order) {
+    private CategoryEntity(UserEntity user, String name, CategoryColor color, boolean isVisible, int order) {
         this.user = user;
         this.name = name;
         this.color = color;

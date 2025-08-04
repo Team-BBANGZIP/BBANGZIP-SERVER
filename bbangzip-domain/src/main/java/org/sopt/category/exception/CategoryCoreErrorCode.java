@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum CategoryCoreErrorCode implements ErrorCode {
 
   DUPLICATED_CATEGORY(HttpStatus.CONFLICT, 40901, "이미 존재하는 카테고리입니다."),
-  INVALID_CATEGORY_COLOR(HttpStatus.BAD_REQUEST, 400001, "지원하지 않는 색상입니다.");
+  INVALID_CATEGORY_COLOR(HttpStatus.BAD_REQUEST, 40002, "지원하지 않는 색상입니다.");
 
   private final HttpStatus httpStatus;
   private final int code;
