@@ -14,10 +14,10 @@ public class CategoryService {
     private final CategorySaver categorySaver;
 
     @Transactional
-    public Category createCategory(final Long userId, final CategoryCreateRequest categoryCreateRequest) {
+    public Category createCategory(final long userId, final CategoryCreateRequest categoryCreateRequest) {
 
         CategoryEntity categoryEntity = CategoryEntity.builder()
-            // TODO: 유저 주입
+            .id(userId)
             .name(categoryCreateRequest.name())
             .color(categoryCreateRequest.color())
             .isVisible(true)
