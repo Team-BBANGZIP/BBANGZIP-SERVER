@@ -43,5 +43,8 @@ public class UserEntity extends BaseTimeEntity {
     @Column(name = COLUMN_TOTAL_BREAD_COUNT, nullable = false)
     private int totalBreadCount;
 
+    public void updateCommitmentMessage(String message) {
+        this.commitmentMessage = message;
+    }
 
 }
