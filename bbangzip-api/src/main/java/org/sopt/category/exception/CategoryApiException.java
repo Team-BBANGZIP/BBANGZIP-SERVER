@@ -1,19 +1,22 @@
 package org.sopt.category.exception;
 
 import org.sopt.code.ErrorCode;
-import org.springframework.http.HttpStatus;
+import org.sopt.exception.BbangzipBaseException;
 
-public abstract class CategoryApiException extends CategoryBaseException {
+public abstract class CategoryApiException extends BbangzipBaseException {
+    private final ErrorCode errorCode;
+
     protected CategoryApiException(ErrorCode errorCode) {
-        super(errorCode);
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
     protected CategoryApiException(ErrorCode errorCode, String detailMessage) {
-        super(errorCode, detailMessage);
+        super(detailMessage);
+        this.errorCode = errorCode;
     }
 
-    @Override
-    public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
+    public ErrorCode getErrorCode() {
+        return errorCode;
     }
 }

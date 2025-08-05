@@ -77,14 +77,15 @@ public class GlobalExceptionHandler {
         HttpMessageNotReadableException e) {
         log.warn("[HttpMessageNotReadableException] {}", e.getMessage());
 
-        // 내부에 중첩된 BbangzipBaseException (InvalidCategoryColorException) 찾기
         Throwable cause = e.getCause();
         while (cause != null) {
             if (cause instanceof BbangzipBaseException bbangzipBaseException) {
-                log.warn("[HttpMessageNotReadableException - Nested BbangzipBaseException] {}", bbangzipBaseException.getMessage());
-                return ResponseEntity
-                    .status(bbangzipBaseException.getStatus())
-                    .body(BaseResponse.fail(bbangzipBaseException.getErrorCode()));
+                // 도메인 예외로 캐스팅
+                if (bbangzipBaseException instanceof org.sopt.category.exception.CategoryApiException apiEx) {
+                    return ResponseEntity
+                        .status(apiEx.getErrorCode().getHttpStatus())
+                        .body(BaseResponse.fail(apiEx.getErrorCode()));
+                }
             }
             cause = cause.getCause();
         }
@@ -95,14 +96,27 @@ public class GlobalExceptionHandler {
             .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE));
     }
 
+
     // BbangzipBaseException (모든 커스텀 예외) 처리 핸들러
     @ExceptionHandler(BbangzipBaseException.class)
-    public ResponseEntity<BaseResponse<Void>> handleBaseException(BbangzipBaseException e) {
-        log.warn("[BbangzipBaseException] {} - {}", e.getErrorCode().getMessage(), e.getMessage());
+    public ResponseEntity<BaseResponse<Void>> handleBbangzipBaseException(BbangzipBaseException e) {
+        log.warn("[BbangzipBaseException] {}", e.getMessage());
+
+        if (e instanceof org.sopt.category.exception.CategoryApiException apiEx) {
+            return ResponseEntity
+                .status(apiEx.getErrorCode().getHttpStatus())
+                .body(BaseResponse.fail(apiEx.getErrorCode()));
+        }
+
+        if (e instanceof org.sopt.category.exception.CategoryCoreException coreEx) {
+            return ResponseEntity
+                .status(coreEx.getErrorCode().getHttpStatus())
+                .body(BaseResponse.fail(coreEx.getErrorCode()));
+        }
 
         return ResponseEntity
-            .status(e.getErrorCode().getHttpStatus())
-            .body(BaseResponse.fail(e.getErrorCode()));
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(BaseResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR));
     }
 
     // 기본 예외
