@@ -1,0 +1,29 @@
+package org.sopt.user.controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.sopt.user.dto.request.CommitmentMessageCreateRequest;
+import org.sopt.user.dto.response.CommitmentMessageResponse;
+import org.sopt.user.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1")
+public class UserController {
+
+    private final UserService userService;
+
+    @PostMapping("/todos/commitments")
+    public ResponseEntity<CommitmentMessageResponse> createCommitmentMessage(
+            // TODO: 커스텀 어노테이션  final Long userId,
+            @Valid @RequestBody final CommitmentMessageCreateRequest request
+    ) {
+        Long dummyUserId = 1L;
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userService.createCommitmentMessage(dummyUserId, request));
+    }
+}
