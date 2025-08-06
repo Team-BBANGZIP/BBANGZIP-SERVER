@@ -1,4 +1,4 @@
-package org.sopt.category.service;
+package org.sopt.category.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;

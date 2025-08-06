@@ -1,13 +1,5 @@
 package org.sopt.category.domain;
 
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_COLOR;
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ID;
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_IS_VISIBLE;
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_NAME;
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ORDER;
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_USER_ID;
-import static org.sopt.category.domain.CategoryTableConstants.TABLE_CATEGORY;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,6 +17,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.common.BaseTimeEntity;
 import org.sopt.user.domain.UserEntity;
+
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_COLOR;
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ID;
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_IS_VISIBLE;
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_NAME;
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ORDER;
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_USER_ID;
+import static org.sopt.category.domain.CategoryTableConstants.TABLE_CATEGORY;
 
 @Entity
 @Getter
