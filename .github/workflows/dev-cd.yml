@@ -72,22 +72,16 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
-            # 🔧 8080 포트 사용 중인 프로세스가 있으면 강제 종료
-            PORT_8080_PID=$(sudo lsof -t -i:8080)
-            if [ -n "$PORT_8080_PID" ]; then
-              echo "[INFO] Killing process using port 8080: $PORT_8080_PID"
-              sudo kill -9 $PORT_8080_PID
+            # 컨테이너 이름 기반으로 종료
+            CONTAINER_NAME=bbangzip-app
+            CONTAINER_ID=$(docker ps -q --filter "name=$CONTAINER_NAME")
+      
+            if [ -n "$CONTAINER_ID" ]; then
+            echo "[INFO] Stopping and removing container: $CONTAINER_NAME ($CONTAINER_ID)"
+            docker stop $CONTAINER_ID
+            docker rm $CONTAINER_ID
             else
-              echo "[INFO] No process using port 8080"
-            fi
-
-            # 🔧 도커 컨테이너 점유 확인해서 제거 (추가적인 안전망)
-            PORT_8080_CONTAINER=$(docker ps -q --filter "publish=8080")
-            if [ -n "$PORT_8080_CONTAINER" ]; then
-              echo "[INFO] Port 8080 is also used by container: $PORT_8080_CONTAINER"
-              docker rm -f $PORT_8080_CONTAINER
-            else
-              echo "[INFO] No containers using port 8080"
+            echo "[INFO] No running container named: $CONTAINER_NAME"
             fi
 
             # .env 파일 생성
