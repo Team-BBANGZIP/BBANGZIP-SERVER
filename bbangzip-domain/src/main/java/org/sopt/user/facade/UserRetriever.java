@@ -1,4 +1,4 @@
-package org.sopt.user.service;
+package org.sopt.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.UserEntity;
