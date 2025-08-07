@@ -3,18 +3,21 @@ FROM gradle:8.13-jdk17 AS build
 
 WORKDIR /app
 
-# 필요한 파일만 먼저 복사
-COPY settings.gradle.kts .
-COPY build.gradle.kts .
-COPY gradle.properties .
+# Gradle 설정 관련 파일
+COPY settings.gradle .
+COPY build.gradle .
 COPY gradlew .
 COPY gradle/ gradle/
 
-# bbangzip-api 모듈만 복사
+
+# 필요한 모듈만 복사
 COPY bbangzip-api/ bbangzip-api/
 COPY bbangzip-domain/ bbangzip-domain/
+COPY bbangzip-external/ bbangzip-external/
+COPY bbangzip-common/ bbangzip-common/
+COPY bbangzip-auth/ bbangzip-auth/
 
-# bbangzip-api만 빌드
+# bbangzip-api 모듈만 빌드
 RUN ./gradlew :bbangzip-api:bootJar --no-daemon --build-cache
 
 # 2단계: 이미지 실행
