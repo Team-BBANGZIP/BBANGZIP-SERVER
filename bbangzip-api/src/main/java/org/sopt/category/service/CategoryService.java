@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;
 import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.dto.request.CategoryCreateRequest;
+import org.sopt.category.facade.CategorySaver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
