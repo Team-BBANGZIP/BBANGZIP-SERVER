@@ -7,21 +7,37 @@ repositories {
 }
 
 dependencies {
+    // Internal Modules
     implementation project(":bbangzip-domain")
     implementation project(":bbangzip-external")
     implementation project(":bbangzip-common")
     implementation project(":bbangzip-auth")
 
+    // Database
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
-bootJar { enabled = true } // dependencies 와 class 파일 모두 묶어서 빌드
-jar { enabled = false } // class 만 묶어서 빌드
+bootJar { enabled = true } // 전체 실행 JAR 생성 (의존성 포함)
+jar { enabled = false }    // 일반 JAR 비활성화 (라이브러리 용도 아님)
