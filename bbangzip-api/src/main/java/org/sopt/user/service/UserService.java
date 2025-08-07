@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.UserEntity;
 import org.sopt.user.dto.request.CommitmentMessageCreateRequest;
 import org.sopt.user.dto.response.CommitmentMessageResponse;
+import org.sopt.user.facade.UserRetriever;
+import org.sopt.user.facade.UserSaver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
