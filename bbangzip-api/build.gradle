@@ -23,5 +23,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
-bootJar { enabled = true } // dependencies 와 class 파일 모두 묶어서 빌드
+bootJar {
+    enabled = true
+    archiveFileName = 'bbangzip.jar' // 고정 파일명 지정
+} // dependencies 와 class 파일 모두 묶어서 빌드
+
 jar { enabled = false } // class 만 묶어서 빌드
