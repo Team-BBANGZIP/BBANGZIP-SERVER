@@ -1,0 +1,48 @@
+name: CI – Build & Test on develop
+
+# 워크플로 실행 조건: main, develop 브랜치에 push 또는 PR 발생 시 실행
+on:
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  test:
+    name: Build & Test Job
+    runs-on: ubuntu-latest   # GitHub Actions에서 제공하는 Ubuntu 리눅스 가상환경에서 실행
+
+    steps:
+      # 1. GitHub 저장소 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. .env 환경변수 파일 생성 (GitHub Secrets에 저장된 문자열을 파일로 저장)
+      - name: Load .env
+        run: echo "${{ secrets.ENV_TEST_FILE }}" > .env
+
+      # 3. JDK 17 설치 (Spring Boot 실행 환경 구성)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+
+      # 4. Gradle Wrapper 실행 가능하도록 권한 부여
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # 5. Gradle 캐시 설정 (의존성 다운로드 속도 최적화)
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*','**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 6. Gradle 빌드 및 테스트 실행
+      - name: Build & Test
+        run: ./gradlew clean build --no-daemon

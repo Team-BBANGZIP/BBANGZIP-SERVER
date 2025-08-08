@@ -37,5 +37,5 @@ out/
 .vscode/
 
 application.yml
-application-dev.yml
-.env
+.env.*
+*.pem
