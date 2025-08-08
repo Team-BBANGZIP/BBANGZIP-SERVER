@@ -8,5 +8,5 @@ public class TodoTableConstants {
     public static final String COLUMN_START_TIME = "start_time";
     public static final String COLUMN_IS_COMPLETED = "is_completed";
     public static final String COLUMN_TARGET_DATE = "target_date";
-    public static final String COLUMN_ORDER = "order";
+    public static final String COLUMN_ORDER = "order_index";
 }
