@@ -5,12 +5,15 @@ import org.sopt.category.domain.Category;
 import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.dto.request.CategoryCreateRequest;
 import org.sopt.category.dto.response.CategoryCreateResponse;
+import org.sopt.category.dto.response.CategoryResponse;
 import org.sopt.category.facade.CategoryRetriever;
 import org.sopt.category.facade.CategorySaver;
 import org.sopt.user.domain.UserEntity;
 import org.sopt.user.facade.UserRetriever;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,15 @@ public class CategoryService {
         return CategoryCreateResponse.from(saved);
 
     }
+
+    @Transactional(readOnly = true)
+    public List<CategoryResponse> getAllCategories(final long userId) {
+        List<CategoryEntity> categories = categoryRetriever.findAllByUserId(userId);
+        return categories.stream()
+                .map(CategoryResponse::from)
+                .toList();
+    }
+
 
 }
 
