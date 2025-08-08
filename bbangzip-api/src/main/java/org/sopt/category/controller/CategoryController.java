@@ -7,10 +7,7 @@ import org.sopt.category.dto.response.CategoryCreateResponse;
 import org.sopt.category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,16 +18,13 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryCreateResponse> createCategory(
-        final Long userId,
-        @Valid @RequestBody final CategoryCreateRequest categoryCreateRequest) {
-
-        CategoryCreateResponse response = CategoryCreateResponse.from(
-            categoryService.createCategory(userId, categoryCreateRequest)
-        );
+            // TODO: 커스텀 어노테이션 final Long userId,
+            @Valid @RequestBody final CategoryCreateRequest categoryCreateRequest
+    ) {
+        Long dummyUserId = 1L;
 
         return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(response);
+                .status(HttpStatus.CREATED)
+                .body(categoryService.createCategory(dummyUserId, categoryCreateRequest));
     }
-
 }

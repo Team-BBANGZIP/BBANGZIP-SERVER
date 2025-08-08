@@ -55,8 +55,8 @@ public class CategoryEntity extends BaseTimeEntity {
     private int order;
 
     @Builder
-    public CategoryEntity(Long id, String name, CategoryColor color, boolean isVisible, int order) {
-        this.id = id;
+    public CategoryEntity(UserEntity user, String name, CategoryColor color, boolean isVisible, int order) {
+        this.user = user;
         this.name = name;
         this.color = color;
         this.isVisible = isVisible;
