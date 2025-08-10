@@ -30,4 +30,9 @@ public class CategoryRetriever {
     public List<CategoryEntity> findAllByUserId(final long userId) {
         return categoryRepository.findAllByUserIdOrderByOrderAsc(userId);
     }
+
+    public CategoryEntity findByIdAndUserId(final long categoryId, final long userId) {
+        return categoryRepository.findByIdAndUserId(categoryId, userId)
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
+    }
 }
