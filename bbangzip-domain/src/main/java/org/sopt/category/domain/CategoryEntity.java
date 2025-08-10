@@ -63,5 +63,11 @@ public class CategoryEntity extends BaseTimeEntity {
         this.order = order;
     }
 
+    public void update(final String name, final CategoryColor color, final boolean isVisible) {
+        this.name = name;
+        this.color = color;
+        this.isVisible = isVisible;
+    }
+
 
 }

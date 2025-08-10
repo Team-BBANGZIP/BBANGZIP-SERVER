@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;
 import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.dto.request.CategoryCreateRequest;
+import org.sopt.category.dto.request.CategoryUpdateRequest;
 import org.sopt.category.dto.response.CategoryCreateResponse;
 import org.sopt.category.dto.response.CategoryResponse;
 import org.sopt.category.facade.CategoryRetriever;
@@ -50,6 +51,14 @@ public class CategoryService {
         return categories.stream()
                 .map(CategoryResponse::from)
                 .toList();
+    }
+
+    @Transactional
+    public CategoryResponse updateCategory(final long userId, final long categoryId, final CategoryUpdateRequest categoryUpdateRequest) {
+        CategoryEntity category = categoryRetriever.findByIdAndUserId(categoryId, userId);
+        // 순서는 유지, 나머지만 수정
+        category.update(categoryUpdateRequest.name(), categoryUpdateRequest.color(), categoryUpdateRequest.isVisible());
+        return CategoryResponse.from(category);
     }
 
 
