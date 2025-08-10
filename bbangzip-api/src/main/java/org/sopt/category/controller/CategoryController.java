@@ -3,12 +3,15 @@ package org.sopt.category.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.dto.request.CategoryCreateRequest;
+import org.sopt.category.dto.request.CategoryUpdateRequest;
 import org.sopt.category.dto.response.CategoryCreateResponse;
 import org.sopt.category.dto.response.CategoryResponse;
 import org.sopt.category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,16 @@ public class CategoryController {
     ) {
         Long dummyUserId = 1L;
         return ResponseEntity.ok(categoryService.getAllCategories(dummyUserId));
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponse> updateCategory(
+            @PathVariable final Long categoryId,
+            // TODO: 커스텀 어노테이션 final Long userId,
+            @Valid @RequestBody final CategoryUpdateRequest request
+    ) {
+        Long dummyUserId = 1L;
+        return ResponseEntity.ok(categoryService.updateCategory(dummyUserId, categoryId, request));
     }
 
 
