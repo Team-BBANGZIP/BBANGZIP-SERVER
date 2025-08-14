@@ -7,14 +7,14 @@ public record CategoryCreateRes(
     Long categoryId,
     String name,
     CategoryColor color,
-    boolean isVisible
+    boolean isStopped
 ) {
   public static CategoryCreateRes from(Category category) {
     return new CategoryCreateRes(
         category.getId(),
         category.getName(),
         category.getColor(),
-        category.isVisible()
+        category.isStopped()
     );
   }
 }

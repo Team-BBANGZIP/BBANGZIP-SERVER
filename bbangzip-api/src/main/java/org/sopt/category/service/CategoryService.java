@@ -36,7 +36,7 @@ public class CategoryService {
                 .user(user)
                 .name(categoryCreateReq.name())
                 .color(categoryCreateReq.color())
-                .isVisible(true)
+                .isStopped(false)
                 .order(categoryCount) // 최하단 순서 지정
                 .build();
 
@@ -56,8 +56,14 @@ public class CategoryService {
     @Transactional
     public CategoryRes updateCategory(final long userId, final long categoryId, final CategoryUpdateReq categoryUpdateReq) {
         CategoryEntity category = categoryRetriever.findByIdAndUserId(categoryId, userId);
-        // 순서는 유지, 나머지만 수정
-        category.update(categoryUpdateReq.name(), categoryUpdateReq.color(), categoryUpdateReq.isVisible());
+
+        category.update(
+                categoryUpdateReq.name(),
+                categoryUpdateReq.color() != null ? categoryUpdateReq.color() : category.getColor(),  // 색상 (null일 경우 기존 색상 사용)
+                categoryUpdateReq.isStopped()
+        );
+        categorySaver.save(category);
+
         return CategoryRes.from(category);
     }
 }

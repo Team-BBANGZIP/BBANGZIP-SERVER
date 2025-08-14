@@ -18,12 +18,15 @@ import lombok.NoArgsConstructor;
 import org.sopt.common.BaseTimeEntity;
 import org.sopt.user.domain.UserEntity;
 
+import java.time.LocalDateTime;
+
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_COLOR;
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ID;
-import static org.sopt.category.domain.CategoryTableConstants.COLUMN_IS_VISIBLE;
+import static org.sopt.category.domain.CategoryTableConstants.COLUMN_IS_STOPPED;
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_NAME;
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ORDER;
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_USER_ID;
+import static org.sopt.category.domain.CategoryTableConstants.STOPPED_DATE;
 import static org.sopt.category.domain.CategoryTableConstants.TABLE_CATEGORY;
 
 @Entity
@@ -48,26 +51,39 @@ public class CategoryEntity extends BaseTimeEntity {
     @Column(name = COLUMN_COLOR, nullable = false)
     private CategoryColor color;
 
-    @Column(name = COLUMN_IS_VISIBLE, nullable = false)
-    private boolean isVisible;
+    @Column(name = COLUMN_IS_STOPPED, nullable = false)
+    private boolean isStopped;
+
+    @Column(name = STOPPED_DATE)
+    private LocalDateTime stoppedDate;
+
 
     @Column(name = COLUMN_ORDER, nullable = false)
     private int order;
 
     @Builder
-    public CategoryEntity(UserEntity user, String name, CategoryColor color, boolean isVisible, int order) {
+    public CategoryEntity(UserEntity user, String name, CategoryColor color, boolean isStopped, int order) {
         this.user = user;
         this.name = name;
         this.color = (color != null) ? color : CategoryColor.RED1;
-        this.isVisible = isVisible;
+        this.isStopped = false;
         this.order = order;
     }
 
-    public void update(final String name, final CategoryColor color, final boolean isVisible) {
+    public void update(final String name, final CategoryColor color, final boolean isStopped) {
         this.name = name;
         this.color = color;
-        this.isVisible = isVisible;
+        this.isStopped = isStopped;
+
+        if (isStopped) {
+            // "그만하기" 상태를 on 숨겨진 날짜를 기록
+            this.stoppedDate = LocalDateTime.now();
+        } else {
+            // "그만하기" 상태를 off로 변경시 숨겨진 날짜 초기화
+            this.stoppedDate = null;
+        }
     }
+
 
 
 }
