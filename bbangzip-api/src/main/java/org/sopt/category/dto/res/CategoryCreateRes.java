@@ -1,16 +1,16 @@
-package org.sopt.category.dto.response;
+package org.sopt.category.dto.res;
 
 import org.sopt.category.domain.Category;
 import org.sopt.category.domain.CategoryColor;
 
-public record CategoryCreateResponse(
+public record CategoryCreateRes(
     Long categoryId,
     String name,
     CategoryColor color,
     boolean isVisible
 ) {
-  public static CategoryCreateResponse from(Category category) {
-    return new CategoryCreateResponse(
+  public static CategoryCreateRes from(Category category) {
+    return new CategoryCreateRes(
         category.getId(),
         category.getName(),
         category.getColor(),
