@@ -1,31 +1,27 @@
 package org.sopt.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.user.domain.UserEntity;
-import org.sopt.user.dto.request.CommitmentMessageCreateRequest;
-import org.sopt.user.dto.response.CommitmentMessageResponse;
-import org.sopt.user.facade.UserRetriever;
-import org.sopt.user.facade.UserSaver;
+import org.sopt.user.domain.User;
+import org.sopt.user.dto.req.CommitmentMessageCreateReq;
+import org.sopt.user.dto.res.CommitmentMessageRes;
+import org.sopt.user.facade.UserFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRetriever userRetriever;
-    private final UserSaver userSaver;
+    private final UserFacade userFacade;
 
     @Transactional
-    public CommitmentMessageResponse createCommitmentMessage(
-            final Long userId,
-            final CommitmentMessageCreateRequest request
+    public CommitmentMessageRes createCommitmentMessage(
+            final long userId,
+            final CommitmentMessageCreateReq request
     ) {
-        UserEntity user = userRetriever.findByUserId(userId);
-        userSaver.saveCommitmentMessage(user, request.commitmentMessage());
+        User user = userFacade.getUserById(userId);
+        userFacade.saveCommitmentMessage(user, request.commitmentMessage());
 
-        return new CommitmentMessageResponse(user.getCommitmentMessage());
+        return new CommitmentMessageRes(user.getCommitmentMessage());
     }
-
 }

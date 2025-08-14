@@ -2,13 +2,16 @@ package org.sopt.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.UserEntity;
+import org.sopt.user.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class UserSaver {
 
-    public void saveCommitmentMessage(UserEntity user, String message) {
-        user.updateCommitmentMessage(message);
+    private final UserRepository userRepository;
+
+    public void save(UserEntity userEntity) {
+        userRepository.save(userEntity);
     }
 }
