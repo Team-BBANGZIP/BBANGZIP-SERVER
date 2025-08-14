@@ -11,7 +11,7 @@ public class Category {
   private final Long userId;
   private final String name;
   private final CategoryColor color;
-  private final boolean isVisible;
+  private final boolean isStopped;
   private final int order;
 
   // Entity → Domain
@@ -21,7 +21,7 @@ public class Category {
         .userId(entity.getUser().getId())
         .name(entity.getName())
         .color(entity.getColor())
-        .isVisible(entity.isVisible())
+        .isStopped(entity.isStopped())
         .order(entity.getOrder())
         .build();
   }
