@@ -17,10 +17,10 @@ public class UserService {
     @Transactional
     public CommitmentMessageRes createCommitmentMessage(
             final long userId,
-            final CommitmentMessageCreateReq request
+            final CommitmentMessageCreateReq commitmentMessageCreateReq
     ) {
         User user = userFacade.getUserById(userId);
-        userFacade.saveCommitmentMessage(user, request.commitmentMessage());
+        userFacade.saveCommitmentMessage(user, commitmentMessageCreateReq.commitmentMessage());
 
         return new CommitmentMessageRes(user.getCommitmentMessage());
     }
