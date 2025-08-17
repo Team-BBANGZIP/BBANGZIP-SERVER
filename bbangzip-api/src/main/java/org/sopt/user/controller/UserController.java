@@ -19,11 +19,11 @@ public class UserController {
     @PostMapping("/commitments")
     public ResponseEntity<CommitmentMessageRes> createCommitmentMessage(
             // TODO: 커스텀 어노테이션  final Long userId,
-            @Valid @RequestBody final CommitmentMessageCreateReq request
+            @Valid @RequestBody final CommitmentMessageCreateReq commitmentMessageCreateReq
     ) {
         Long dummyUserId = 1L;
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userService.createCommitmentMessage(dummyUserId, request));
+                .body(userService.createCommitmentMessage(dummyUserId, commitmentMessageCreateReq));
     }
 }

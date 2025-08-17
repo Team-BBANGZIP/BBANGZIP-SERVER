@@ -74,14 +74,9 @@ public class CategoryEntity extends BaseTimeEntity {
         this.name = name;
         this.color = color;
         this.isStopped = isStopped;
+        this.stoppedDate = isStopped ? LocalDateTime.now() : null;
 
-        if (isStopped) {
-            // "그만하기" 상태를 on 숨겨진 날짜를 기록
-            this.stoppedDate = LocalDateTime.now();
-        } else {
-            // "그만하기" 상태를 off로 변경시 숨겨진 날짜 초기화
-            this.stoppedDate = null;
-        }
+
     }
 
 

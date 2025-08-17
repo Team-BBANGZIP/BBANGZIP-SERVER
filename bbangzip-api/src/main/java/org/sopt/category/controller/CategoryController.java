@@ -51,10 +51,10 @@ public class CategoryController {
     public ResponseEntity<CategoryRes> updateCategory(
             @PathVariable final Long categoryId,
             // TODO: 커스텀 어노테이션 final Long userId,
-            @Valid @RequestBody final CategoryUpdateReq request
+            @Valid @RequestBody final CategoryUpdateReq categoryUpdateReq
     ) {
         Long dummyUserId = 1L;
-        return ResponseEntity.ok(categoryService.updateCategory(dummyUserId, categoryId, request));
+        return ResponseEntity.ok(categoryService.updateCategory(dummyUserId, categoryId, categoryUpdateReq));
     }
 
 
