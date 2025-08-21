@@ -1,6 +1,7 @@
 package org.sopt.category.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.category.domain.Category;
 import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.exception.CategoryNotFoundException;
 import org.sopt.category.repository.CategoryRepository;
@@ -21,18 +22,16 @@ public class CategoryRetriever {
         return categoryRepository.countByUserId(userId);
     }
 
-    // 카테고리 ID로 조회
-    public CategoryEntity findById(final long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
+    public List<Category> findAllByUserId(final long userId) {
+        List<CategoryEntity> categoryEntities = categoryRepository.findAllByUserIdOrderByOrderAsc(userId);
+        return categoryEntities.stream()
+                .map(CategoryEntity::toDomain)
+                .toList();
     }
 
-    public List<CategoryEntity> findAllByUserId(final long userId) {
-        return categoryRepository.findAllByUserIdOrderByOrderAsc(userId);
-    }
-
-    public CategoryEntity findByIdAndUserId(final long categoryId, final long userId) {
-        return categoryRepository.findByIdAndUserId(categoryId, userId)
+    public Category findByIdAndUserId(final long categoryId, final long userId) {
+        CategoryEntity categoryEntity = categoryRepository.findByIdAndUserId(categoryId, userId)
                 .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
+        return categoryEntity.toDomain();
     }
 }

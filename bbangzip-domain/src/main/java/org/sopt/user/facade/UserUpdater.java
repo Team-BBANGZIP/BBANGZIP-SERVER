@@ -10,14 +10,15 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class UserRetriever {
+public class UserUpdater {
 
     private final UserRepository userRepository;
 
-    public User findByUserId(final long userId) {
-        UserEntity userEntity = userRepository.findById(userId)
+    public User updateCommitmentMessage(User user, String message) {
+        UserEntity userEntity = userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(UserCoreErrorCode.USER_NOT_FOUND));
-
+        userEntity.updateCommitmentMessage(message);
+        userRepository.save(userEntity);
         return userEntity.toDomain();
     }
 }

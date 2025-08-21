@@ -12,10 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategorySaver {
   private final CategoryRepository categoryRepository;
 
-  @Transactional
-  public Category save(final CategoryEntity categoryEntity) {
-    CategoryEntity savedEntity = categoryRepository.save(categoryEntity);
-    return Category.fromEntity(savedEntity);
-  }
-
+    @Transactional
+    public Category save(final Category category) {
+        CategoryEntity savedEntity = categoryRepository.save(CategoryEntity.forCreate(category));
+        return savedEntity.toDomain();
+    }
 }
