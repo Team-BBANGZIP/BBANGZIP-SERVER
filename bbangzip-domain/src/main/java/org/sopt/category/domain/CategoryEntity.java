@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.common.BaseTimeEntity;
@@ -57,28 +56,26 @@ public class CategoryEntity extends BaseTimeEntity {
     @Column(name = STOPPED_DATE)
     private LocalDateTime stoppedDate;
 
-
     @Column(name = COLUMN_ORDER, nullable = false)
     private int order;
 
-    @Builder
-    public CategoryEntity(UserEntity user, String name, CategoryColor color, boolean isStopped, int order) {
-        this.user = user;
-        this.name = name;
-        this.color = (color != null) ? color : CategoryColor.RED1;
-        this.isStopped = false;
-        this.order = order;
+    public Category toDomain() {
+        return Category.builder()
+                .id(id)
+                .userId(user.getId())
+                .name(name)
+                .color(color)
+                .isStopped(isStopped)
+                .order(order)
+                .build();
     }
 
-    public void update(final String name, final CategoryColor color, final boolean isStopped) {
-        this.name = name;
-        this.color = color;
-        this.isStopped = isStopped;
-        this.stoppedDate = isStopped ? LocalDateTime.now() : null;
-
-
+    public static CategoryEntity forCreate(Category category) {
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.name = category.getName();
+        categoryEntity.color = category.getColor();
+        categoryEntity.isStopped = category.isStopped();
+        categoryEntity.order = category.getOrder();
+        return categoryEntity;
     }
-
-
-
 }

@@ -2,15 +2,12 @@ package org.sopt.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;
-import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.dto.req.CategoryCreateReq;
 import org.sopt.category.dto.req.CategoryUpdateReq;
 import org.sopt.category.dto.res.CategoryCreateRes;
 import org.sopt.category.dto.res.CategoryRes;
-import org.sopt.category.facade.CategoryRetriever;
-import org.sopt.category.facade.CategorySaver;
-import org.sopt.user.domain.UserEntity;
-import org.sopt.user.facade.UserRetriever;
+import org.sopt.category.facade.CategoryFacade;
+import org.sopt.user.facade.UserFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,50 +17,43 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final CategorySaver categorySaver;
-    private final CategoryRetriever categoryRetriever;
-
-    private final UserRetriever userRetriever;
+    private final CategoryFacade categoryFacade;
+    private final UserFacade userFacade;
 
     @Transactional
     public CategoryCreateRes createCategory(final long userId, final CategoryCreateReq categoryCreateReq) {
-
-        UserEntity user = userRetriever.findByUserId(userId);
-
-        int categoryCount = categoryRetriever.countByUserId(userId);
-
-        CategoryEntity categoryEntity = CategoryEntity.builder()
-                .user(user)
+        userFacade.getUserById(userId);
+        int categoryCount = categoryFacade.getCategoryCountByUserId(userId);
+        Category category = Category.builder()
+                .userId(userId)
                 .name(categoryCreateReq.name())
                 .color(categoryCreateReq.color())
                 .isStopped(false)
-                .order(categoryCount) // 최하단 순서 지정
+                .order(categoryCount)  // 최하단 순서 지정
                 .build();
 
-        Category saved = categorySaver.save(categoryEntity);
+        Category saved = categoryFacade.saveCategory(category);
         return CategoryCreateRes.from(saved);
-
     }
 
     @Transactional(readOnly = true)
     public List<CategoryRes> getAllCategories(final long userId) {
-        List<CategoryEntity> categories = categoryRetriever.findAllByUserId(userId);
-        return categories.stream()
+        return categoryFacade.getCategoriesByUserId(userId).stream()
                 .map(CategoryRes::from)
                 .toList();
     }
 
     @Transactional
     public CategoryRes updateCategory(final long userId, final long categoryId, final CategoryUpdateReq categoryUpdateReq) {
-        CategoryEntity category = categoryRetriever.findByIdAndUserId(categoryId, userId);
 
-        category.update(
+        Category category = categoryFacade.getCategoryByIdAndUserId(categoryId, userId);
+        Category updatedCategory = category.update(
                 categoryUpdateReq.name(),
-                categoryUpdateReq.color() != null ? categoryUpdateReq.color() : category.getColor(),  // 색상 (null일 경우 기존 색상 사용)
-                categoryUpdateReq.isStopped()
+                categoryUpdateReq.color() != null ? categoryUpdateReq.color() : category.getColor(),  // color가 null이면 기존 color 사용
+                categoryUpdateReq.isStopped(),
+                category.getOrder()  // order는 변경하지 않음
         );
-        categorySaver.save(category);
-
-        return CategoryRes.from(category);
+        categoryFacade.saveCategory(updatedCategory);
+        return CategoryRes.from(updatedCategory);
     }
 }

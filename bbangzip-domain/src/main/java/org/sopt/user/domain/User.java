@@ -1,28 +1,39 @@
 package org.sopt.user.domain;
 
+import lombok.Builder;
 import lombok.Getter;
+import java.time.LocalDateTime;
 
 @Getter
+@Builder
 public class User {
 
+    private final Long id;
     private final Long platformUserId;
     private final String platform;
     private final String nickname;
+    private final String profileImage;
     private final String commitmentMessage;
+    private final Boolean notificationEnabled;
+    private final String weekStart;
+    private final int totalBreadCount;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    public User(Long platformUserId, String platform, String nickname, String commitmentMessage) {
-        this.platformUserId = platformUserId;
-        this.platform = platform;
-        this.nickname = nickname;
-        this.commitmentMessage = commitmentMessage;
-    }
 
     public static User fromEntity(final UserEntity userEntity) {
-        return new User(
-                userEntity.getPlatformUserId(),
-                userEntity.getPlatform(),
-                userEntity.getNickname(),
-                userEntity.getCommitmentMessage()
-        );
+        return User.builder()
+                .id(userEntity.getId())
+                .platformUserId(userEntity.getPlatformUserId())
+                .platform(userEntity.getPlatform())
+                .nickname(userEntity.getNickname())
+                .profileImage(userEntity.getProfileImage())
+                .commitmentMessage(userEntity.getCommitmentMessage())
+                .notificationEnabled(userEntity.getNotificationEnabled())
+                .weekStart(userEntity.getWeekStart())
+                .totalBreadCount(userEntity.getTotalBreadCount())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
+                .build();
     }
 }

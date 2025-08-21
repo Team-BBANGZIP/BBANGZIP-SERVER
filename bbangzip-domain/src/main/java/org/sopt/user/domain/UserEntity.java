@@ -47,4 +47,20 @@ public class UserEntity extends BaseTimeEntity {
         this.commitmentMessage = message;
     }
 
+    public User toDomain() {
+        return User.builder()
+                .id(id)
+                .platformUserId(platformUserId)
+                .platform(platform)
+                .nickname(nickname)
+                .profileImage(profileImage)
+                .commitmentMessage(commitmentMessage)
+                .notificationEnabled(notificationEnabled)
+                .weekStart(weekStart)
+                .totalBreadCount(totalBreadCount)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
+
 }
