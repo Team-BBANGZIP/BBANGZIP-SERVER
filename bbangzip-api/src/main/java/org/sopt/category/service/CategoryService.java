@@ -56,4 +56,10 @@ public class CategoryService {
         categoryFacade.saveCategory(updatedCategory);
         return CategoryRes.from(updatedCategory);
     }
+
+    @Transactional
+    public void deleteCategory(final long userId, final long categoryId) {
+        Category category = categoryFacade.getCategoryByIdAndUserId(categoryId, userId);
+        categoryFacade.deleteCategory(category);
+    }
 }

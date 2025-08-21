@@ -1,0 +1,20 @@
+package org.sopt.category.facade;
+
+import lombok.RequiredArgsConstructor;
+import org.sopt.category.domain.Category;
+import org.sopt.category.domain.CategoryEntity;
+import org.sopt.category.repository.CategoryRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+@RequiredArgsConstructor
+public class CategoryRemover {
+
+    private final CategoryRepository categoryRepository;
+
+    @Transactional
+    public void delete(final Category category) {
+        categoryRepository.deleteById(category.getId());
+    }
+}
