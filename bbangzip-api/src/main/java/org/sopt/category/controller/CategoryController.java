@@ -9,6 +9,7 @@ import org.sopt.category.dto.res.CategoryRes;
 import org.sopt.category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,5 +58,14 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.updateCategory(dummyUserId, categoryId, categoryUpdateReq));
     }
 
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(
+            @PathVariable final Long categoryId
+            // TODO: 커스텀 어노테이션 final Long userId,
+    ) {
+        Long dummyUserId = 1L;
+        categoryService.deleteCategory(dummyUserId, categoryId);
+        return ResponseEntity.noContent().build();
+    }
 
 }
