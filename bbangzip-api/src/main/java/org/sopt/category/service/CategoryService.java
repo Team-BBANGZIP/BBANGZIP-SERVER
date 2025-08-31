@@ -45,15 +45,14 @@ public class CategoryService {
 
     @Transactional
     public CategoryRes updateCategory(final long userId, final long categoryId, final CategoryUpdateReq categoryUpdateReq) {
-
-        Category category = categoryFacade.getCategoryByIdAndUserId(categoryId, userId);
-        Category updatedCategory = category.update(
+        Category updatedCategory = categoryFacade.updateCategory(
+                categoryId,
+                userId,
                 categoryUpdateReq.name(),
-                categoryUpdateReq.color() != null ? categoryUpdateReq.color() : category.getColor(),  // color가 null이면 기존 color 사용
-                categoryUpdateReq.isStopped(),
-                category.getOrder()  // order는 변경하지 않음
+                categoryUpdateReq.color(),
+                categoryUpdateReq.isStopped()
         );
-        categoryFacade.saveCategory(updatedCategory);
+
         return CategoryRes.from(updatedCategory);
     }
 

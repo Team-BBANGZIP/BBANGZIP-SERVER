@@ -26,15 +26,4 @@ public class Category {
         .build();
   }
 
-    public Category update(String newName, CategoryColor newColor, boolean newIsStopped, int newOrder) {
-        return Category.builder()
-                .id(this.id)  // 기존 id 유지
-                .userId(this.userId)  // 기존 userId 유지
-                .name(newName)
-                .color(newColor)
-                .isStopped(newIsStopped)
-                .order(newOrder)
-                .build();
-    }
-
 }
