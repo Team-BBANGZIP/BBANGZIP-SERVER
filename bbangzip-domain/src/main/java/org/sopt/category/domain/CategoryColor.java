@@ -2,7 +2,7 @@ package org.sopt.category.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import org.sopt.category.exception.CategoryCoreErrorCode;
-import org.sopt.category.exception.InvalidCategoryColorException;
+import org.sopt.category.exception.CategoryInvalidColorException;
 
 public enum CategoryColor {
     RED1,
@@ -21,7 +21,7 @@ public enum CategoryColor {
         try {
             return CategoryColor.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidCategoryColorException(CategoryCoreErrorCode.INVALID_CATEGORY_COLOR);
+            throw new CategoryInvalidColorException(CategoryCoreErrorCode.INVALID_CATEGORY_COLOR);
         }
     }
 }
