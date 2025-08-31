@@ -79,4 +79,13 @@ public class CategoryEntity extends BaseTimeEntity {
         categoryEntity.order = category.getOrder();
         return categoryEntity;
     }
+
+    public void update(String newName, CategoryColor newColor, boolean newIsStopped, int newOrder) {
+        this.name = newName;
+        this.color = newColor;
+        this.isStopped = newIsStopped;
+        this.order = newOrder;
+    }
+
+
 }

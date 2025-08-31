@@ -13,6 +13,7 @@ public class CategoryFacade {
     private final CategoryRetriever categoryRetriever;
     private final CategorySaver categorySaver;
     private final CategoryRemover categoryRemover;
+    private final CategoryUpdater categoryUpdater;
 
     // 유저의 카테고리 개수 반환
     public int getCategoryCountByUserId(final long userId) {
@@ -33,6 +34,12 @@ public class CategoryFacade {
     public Category saveCategory(final Category category) {
         return categorySaver.save(category);
     }
+
+    // 카테고리 수정
+    public Category updateCategory(Long categoryId, Long userId, String newName, CategoryColor newColor, boolean newIsStopped) {
+        return categoryUpdater.updateCategory(categoryId, userId, newName, newColor, newIsStopped);
+    }
+
 
     // 카테고리 삭제
     public void deleteCategory(final Category category) {
