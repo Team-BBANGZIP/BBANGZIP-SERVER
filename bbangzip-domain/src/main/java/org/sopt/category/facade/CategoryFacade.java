@@ -2,6 +2,7 @@ package org.sopt.category.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;
+import org.sopt.category.domain.CategoryColor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -45,4 +46,10 @@ public class CategoryFacade {
     public void deleteCategory(final Category category) {
         categoryRemover.delete(category);
     }
+
+    // 카테고리 순서 변경
+    public void updateCategoryOrder(final List<Category> existingCategories, final List<Long> newOrderIds) {
+        categoryUpdater.updateCategoryOrder(existingCategories, newOrderIds);
+    }
+
 }
