@@ -70,8 +70,9 @@ public class CategoryEntity extends BaseTimeEntity {
                 .build();
     }
 
-    public static CategoryEntity forCreate(Category category) {
+    public static CategoryEntity forCreate(Category category, UserEntity userEntity) {
         CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.user = userEntity;
         categoryEntity.name = category.getName();
         categoryEntity.color = category.getColor();
         categoryEntity.isStopped = category.isStopped();
