@@ -3,6 +3,7 @@ package org.sopt.category.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.dto.req.CategoryCreateReq;
+import org.sopt.category.dto.req.CategoryReorderReq;
 import org.sopt.category.dto.req.CategoryUpdateReq;
 import org.sopt.category.dto.res.CategoryCreateRes;
 import org.sopt.category.dto.res.CategoryRes;
@@ -66,6 +67,16 @@ public class CategoryController {
         Long dummyUserId = 1L;
         categoryService.deleteCategory(dummyUserId, categoryId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/order")
+    public ResponseEntity<Void> reorderCategory(
+            // TODO: 커스텀 어노테이션 final Long userId,
+            @Valid @RequestBody final CategoryReorderReq categoryReorderReq
+    ) {
+        Long dummyUserId = 1L;
+        categoryService.reorderCategory(dummyUserId, categoryReorderReq.categoryOrder());
+        return ResponseEntity.ok().build();
     }
 
 }
