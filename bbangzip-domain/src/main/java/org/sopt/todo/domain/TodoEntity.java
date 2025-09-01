@@ -1,14 +1,5 @@
 package org.sopt.todo.domain;
 
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_CATEGORY_ID;
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_CONTENT;
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_ID;
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_IS_COMPLETED;
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_ORDER;
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_START_TIME;
-import static org.sopt.todo.domain.TodoTableConstants.COLUMN_TARGET_DATE;
-import static org.sopt.todo.domain.TodoTableConstants.TABLE_TODO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,13 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.category.domain.CategoryEntity;
 import org.sopt.common.BaseTimeEntity;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_CATEGORY_ID;
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_CONTENT;
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_ID;
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_IS_COMPLETED;
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_ORDER;
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_START_TIME;
+import static org.sopt.todo.domain.TodoTableConstants.COLUMN_TARGET_DATE;
+import static org.sopt.todo.domain.TodoTableConstants.TABLE_TODO;
 
 @Entity
 @Getter
@@ -44,7 +45,7 @@ public class TodoEntity extends BaseTimeEntity {
     @Column(name = COLUMN_CONTENT, nullable = false)
     private String content;
 
-    @Column(name = COLUMN_START_TIME, nullable = false)
+    @Column(name = COLUMN_START_TIME)
     private LocalTime startTime;
 
     @Column(name = COLUMN_IS_COMPLETED, nullable = false)
@@ -55,5 +56,30 @@ public class TodoEntity extends BaseTimeEntity {
 
     @Column(name = COLUMN_ORDER, nullable = false)
     private int order;
+
+
+    public static TodoEntity forCreate(Todo todo, CategoryEntity categoryEntity) {
+        TodoEntity entity = new TodoEntity();
+        entity.category = categoryEntity;
+        entity.content = todo.getContent();
+        entity.startTime = todo.getStartTime();
+        entity.isCompleted = todo.isCompleted();
+        entity.targetDate = todo.getTargetDate();
+        entity.order = todo.getOrder();
+        return entity;
+    }
+
+
+    public Todo toDomain() {
+        return Todo.builder()
+                .id(id)
+                .category(category.toDomain())
+                .content(content)
+                .startTime(startTime)
+                .isCompleted(isCompleted)
+                .targetDate(targetDate)
+                .order(order)
+                .build();
+    }
 
 }
