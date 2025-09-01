@@ -34,4 +34,10 @@ public class CategoryRetriever {
                 .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
         return categoryEntity.toDomain();
     }
+
+    public CategoryEntity findEntityByIdAndUserId(final long categoryId, final long userId) {
+        return categoryRepository.findByIdAndUserId(categoryId, userId)
+                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
+    }
+
 }

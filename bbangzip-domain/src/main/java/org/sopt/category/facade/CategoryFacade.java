@@ -3,6 +3,7 @@ package org.sopt.category.facade;
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;
 import org.sopt.category.domain.CategoryColor;
+import org.sopt.category.domain.CategoryEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,7 +42,6 @@ public class CategoryFacade {
         return categoryUpdater.updateCategory(categoryId, userId, newName, newColor, newIsStopped);
     }
 
-
     // 카테고리 삭제
     public void deleteCategory(final Category category) {
         categoryRemover.delete(category);
@@ -50,6 +50,10 @@ public class CategoryFacade {
     // 카테고리 순서 변경
     public void updateCategoryOrder(final List<Category> existingCategories, final List<Long> newOrderIds, Long userId) {
         categoryUpdater.updateCategoryOrder(existingCategories, newOrderIds, userId);
+    }
+
+    public CategoryEntity getEntityByIdAndUserId(final long categoryId, final long userId) {
+        return categoryRetriever.findEntityByIdAndUserId(categoryId, userId);
     }
 
 }
