@@ -8,7 +8,7 @@ public enum GlobalErrorCode implements ErrorCode {
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, 40001, "유효하지 않은 요청 파라미터입니다."),
     NOT_FOUND_END_POINT(HttpStatus.NOT_FOUND, 40400, "요청한 API 엔드포인트가 존재하지 않습니다."),
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, 40500, "지원하지 않는 HTTP 메서드입니다."),
-
+    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, 40007, "잘못된 날짜 형식입니다."),
     // 500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 50000, "알 수 없는 서버 내부 오류입니다"),
     ;
