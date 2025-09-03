@@ -2,6 +2,8 @@ package org.sopt.category.repository;
 
 import org.sopt.category.domain.CategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +15,7 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     List<CategoryEntity> findAllByUserIdOrderByOrderAsc(Long userId);
 
     Optional<CategoryEntity> findByIdAndUserId(Long id, Long userId);
+
+    @Query("SELECT c FROM CategoryEntity c WHERE c.id IN :ids AND c.user.id = :userId")
+    List<CategoryEntity> findAllByIdAndUserId(@Param("ids") List<Long> ids, @Param("userId") Long userId);
 }

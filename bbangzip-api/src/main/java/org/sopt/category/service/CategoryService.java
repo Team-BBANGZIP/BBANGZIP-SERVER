@@ -65,7 +65,7 @@ public class CategoryService {
     @Transactional
     public void reorderCategory(final long userId, final List<Long> categoryOrder) {
         List<Category> categories = categoryFacade.getCategoriesByUserId(userId);
-        categoryFacade.updateCategoryOrder(categories, categoryOrder);
+        categoryFacade.updateCategoryOrder(categories, categoryOrder, userId);
     }
 
 }
