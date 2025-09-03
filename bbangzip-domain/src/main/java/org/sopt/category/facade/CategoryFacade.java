@@ -48,8 +48,8 @@ public class CategoryFacade {
     }
 
     // 카테고리 순서 변경
-    public void updateCategoryOrder(final List<Category> existingCategories, final List<Long> newOrderIds) {
-        categoryUpdater.updateCategoryOrder(existingCategories, newOrderIds);
+    public void updateCategoryOrder(final List<Category> existingCategories, final List<Long> newOrderIds, Long userId) {
+        categoryUpdater.updateCategoryOrder(existingCategories, newOrderIds, userId);
     }
 
 }
