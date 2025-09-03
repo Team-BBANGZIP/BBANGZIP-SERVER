@@ -75,26 +75,34 @@ public class GlobalExceptionHandler {
     // JSON 파싱 실패 (ex: 잘못된 형식, enum 값 오류 등) 시 처리하는 예외 핸들러
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<BaseResponse<Void>> handleHttpMessageNotReadableException(
-        HttpMessageNotReadableException e) {
+            HttpMessageNotReadableException e) {
         log.warn("[HttpMessageNotReadableException] {}", e.getMessage());
 
+        // 예외 원인 탐색
         Throwable cause = e.getCause();
         while (cause != null) {
             if (cause instanceof BbangzipBaseException bbangzipBaseException) {
                 // 도메인 예외로 캐스팅
                 if (bbangzipBaseException instanceof org.sopt.category.exception.CategoryApiException apiEx) {
                     return ResponseEntity
-                        .status(apiEx.getErrorCode().getHttpStatus())
-                        .body(BaseResponse.fail(apiEx.getErrorCode()));
+                            .status(apiEx.getErrorCode().getHttpStatus())
+                            .body(BaseResponse.fail(apiEx.getErrorCode()));
                 }
             }
             cause = cause.getCause();
         }
 
+        // 날짜 형식 오류 추가 처리
+        if (e.getMessage().contains("Text '")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(BaseResponse.fail(GlobalErrorCode.INVALID_DATE_FORMAT));
+        }
+
         // 기본 처리
         return ResponseEntity
-            .status(GlobalErrorCode.INVALID_INPUT_VALUE.getHttpStatus())
-            .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE));
+                .status(GlobalErrorCode.INVALID_INPUT_VALUE.getHttpStatus())
+                .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE));
     }
 
 
@@ -129,4 +137,8 @@ public class GlobalExceptionHandler {
             .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
             .body(BaseResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR));
     }
+
+
+
+
 }
