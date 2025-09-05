@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.Category;
 import org.sopt.category.facade.CategoryFacade;
 import org.sopt.todo.domain.Todo;
+import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.res.TodoCreateRes;
 import org.sopt.todo.facade.TodoFacade;
@@ -23,21 +24,19 @@ public class TodoService {
     public TodoCreateRes createTodo(final long userId, final TodoCreateReq todoCreateReq) {
         userFacade.getUserById(userId);
 
-        Category category = categoryFacade.getCategoryByIdAndUserId(todoCreateReq.categoryId(), userId);
+        categoryFacade.getCategoryByIdAndUserId(todoCreateReq.categoryId(), userId);
 
-        int order = todoFacade.getTodoCountByCategoryAndDate(category.getId(), todoCreateReq.targetDate());
+        int order = todoFacade.getTodoCountByCategoryAndDate(todoCreateReq.categoryId(), todoCreateReq.targetDate());
 
-        Todo todo = Todo.builder()
-                .category(category)
-                .content(todoCreateReq.content())
-                .startTime(todoCreateReq.startTime())
-                .isCompleted(false)
-                .targetDate(todoCreateReq.targetDate())
-                .order(order)
-                .build();
+        TodoEntity saved = todoFacade.saveTodo(
+                todoCreateReq.categoryId(),
+                todoCreateReq.content(),
+                todoCreateReq.targetDate(),
+                todoCreateReq.startTime(),
+                false,
+                order
+        );
 
-        Todo saved = todoFacade.saveTodo(todo);
-        return TodoCreateRes.from(saved);
+        return TodoCreateRes.from(saved.toDomain());
     }
-
 }

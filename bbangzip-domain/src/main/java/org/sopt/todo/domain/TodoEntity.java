@@ -58,17 +58,23 @@ public class TodoEntity extends BaseTimeEntity {
     private int order;
 
 
-    public static TodoEntity forCreate(Todo todo, CategoryEntity categoryEntity) {
+    public static TodoEntity forCreate(
+            String content,
+            CategoryEntity category,
+            LocalDate targetDate,
+            LocalTime startTime,
+            boolean isCompleted,
+            int order
+    ) {
         TodoEntity entity = new TodoEntity();
-        entity.category = categoryEntity;
-        entity.content = todo.getContent();
-        entity.startTime = todo.getStartTime();
-        entity.isCompleted = todo.isCompleted();
-        entity.targetDate = todo.getTargetDate();
-        entity.order = todo.getOrder();
+        entity.content = content;
+        entity.category = category;
+        entity.targetDate = targetDate;
+        entity.startTime = startTime;
+        entity.isCompleted = isCompleted;
+        entity.order = order;
         return entity;
     }
-
 
     public Todo toDomain() {
         return Todo.builder()
