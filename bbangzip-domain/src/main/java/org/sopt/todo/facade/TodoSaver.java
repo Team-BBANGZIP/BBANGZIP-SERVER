@@ -3,28 +3,41 @@ package org.sopt.todo.facade;
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.facade.CategoryFacade;
+import org.sopt.category.repository.CategoryRepository;
 import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Component
 @RequiredArgsConstructor
 public class TodoSaver {
 
     private final TodoRepository todoRepository;
-    private final CategoryFacade categoryFacade;
+    private final CategoryRepository categoryRepository;
 
-    public Todo save(final Todo todo) {
+    public TodoEntity save(
+            Long categoryId,
+            String content,
+            LocalDate targetDate,
+            LocalTime startTime,
+            boolean isCompleted,
+            int order
+    ) {
+        // 프록시 - 실제로 DB SELECT 안 나감
+        CategoryEntity categoryRef = categoryRepository.getReferenceById(categoryId);
 
-        Long userId = todo.getCategory().getUserId();
-        Long categoryId = todo.getCategory().getId();
-
-        CategoryEntity categoryEntity = categoryFacade.getEntityByIdAndUserId(categoryId, userId);
-        TodoEntity entity = TodoEntity.forCreate(todo, categoryEntity);
-        TodoEntity saved = todoRepository.save(entity);
-
-        return saved.toDomain();
-
+        TodoEntity entity = TodoEntity.forCreate(
+                content,
+                categoryRef,
+                targetDate,
+                startTime,
+                isCompleted,
+                order
+        );
+        return todoRepository.save(entity);
     }
 }
