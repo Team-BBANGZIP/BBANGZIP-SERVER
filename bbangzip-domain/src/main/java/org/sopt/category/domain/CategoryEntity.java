@@ -87,5 +87,8 @@ public class CategoryEntity extends BaseTimeEntity {
         this.order = newOrder;
     }
 
+    public void updateOrder(int newOrder) {
+        this.order = newOrder;
+    }
 
 }

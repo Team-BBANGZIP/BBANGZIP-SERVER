@@ -69,13 +69,8 @@ public class CategoryUpdater {
 
         for (CategoryEntity entity : categoryEntities) {
             Integer newOrder = idToOrder.get(entity.getId());
-            if (newOrder != null && !newOrder.equals(entity.getOrder())) { // 순서가 변경된 경우에만 업데이트
-                entity.update(
-                        entity.getName(),
-                        entity.getColor(),
-                        entity.isStopped(),
-                        newOrder // 새로운 정렬 순서
-                );
+            if (newOrder != null && !newOrder.equals(entity.getOrder())) {
+                entity.updateOrder(newOrder);
             }
         }
     }
