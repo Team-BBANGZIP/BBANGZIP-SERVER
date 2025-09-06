@@ -20,8 +20,8 @@ public class UserService {
             final CommitmentMessageCreateReq commitmentMessageCreateReq
     ) {
         User user = userFacade.getUserById(userId);
-        userFacade.saveCommitmentMessage(user, commitmentMessageCreateReq.commitmentMessage());
+        User updated = userFacade.saveCommitmentMessage(user, commitmentMessageCreateReq.commitmentMessage());
 
-        return new CommitmentMessageRes(user.getCommitmentMessage());
+        return new CommitmentMessageRes(updated.getCommitmentMessage());
     }
 }
