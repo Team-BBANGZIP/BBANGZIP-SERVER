@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.code.ErrorCode;
 import org.sopt.code.GlobalErrorCode;
-import org.sopt.exception.BbangzipAuthException;
 import org.sopt.exception.BbangzipBaseException;
 import org.sopt.response.BaseResponse;
 import org.springframework.http.HttpStatus;
@@ -23,16 +22,6 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(BbangzipAuthException.class)
-    public ResponseEntity<BaseResponse<Void>> handleAuthException(BbangzipAuthException e) {
-        ErrorCode errorCode = e.getErrorCode();
-        log.warn("[AuthException] {} - {}", errorCode.getMessage(), e.getMessage());
-
-        return ResponseEntity
-            .status(e.getStatus())
-            .body(BaseResponse.fail(errorCode));
-    }
 
     // @Valid 실패 시 예외
     @ExceptionHandler(MethodArgumentNotValidException.class)
