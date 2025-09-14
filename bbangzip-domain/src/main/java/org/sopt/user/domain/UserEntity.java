@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.common.BaseTimeEntity;
+import org.sopt.jwt.auth.authentication.UserRole;
 
 import static org.sopt.user.domain.UserTableConstants.*;
 
@@ -18,6 +19,10 @@ public class UserEntity extends BaseTimeEntity {
     @Column(name = COLUMN_ID)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = COLUMN_USER_ROLE)
+    private UserRole userRole;
 
     @Column(name = COLUMN_PLATFORM_USER_ID, nullable = false, unique = true)
     private Long platformUserId;

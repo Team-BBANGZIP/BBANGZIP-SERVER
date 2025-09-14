@@ -3,6 +3,7 @@ package org.sopt.user.domain;
 public class UserTableConstants {
     public static final String TABLE_USER = "users";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_USER_ROLE = "user_role";
     public static final String COLUMN_PLATFORM_USER_ID = "platform_user_id";
     public static final String COLUMN_PLATFORM = "platform";
     public static final String COLUMN_NICKNAME = "nickname";

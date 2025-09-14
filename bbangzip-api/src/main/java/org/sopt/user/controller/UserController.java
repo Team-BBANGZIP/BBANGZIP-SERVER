@@ -2,6 +2,7 @@ package org.sopt.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.sopt.jwt.annotation.UserId;
 import org.sopt.user.dto.req.CommitmentMessageCreateReq;
 import org.sopt.user.dto.res.CommitmentMessageRes;
 import org.sopt.user.service.UserService;
@@ -18,12 +19,11 @@ public class UserController {
 
     @PostMapping("/commitments")
     public ResponseEntity<CommitmentMessageRes> createCommitmentMessage(
-            // TODO: 커스텀 어노테이션  final Long userId,
+            @UserId Long userId,
             @Valid @RequestBody final CommitmentMessageCreateReq commitmentMessageCreateReq
     ) {
-        Long dummyUserId = 1L;
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userService.createCommitmentMessage(dummyUserId, commitmentMessageCreateReq));
+                .body(userService.createCommitmentMessage(userId, commitmentMessageCreateReq));
     }
 }
