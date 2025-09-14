@@ -24,6 +24,13 @@ public class TodoRetriever {
         return todoRepository.countByCategoryIdAndTargetDate(categoryId, targetDate);
     }
 
+    public List<Todo> findTodosByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date) {
+        List<TodoEntity> entities = todoRepository.findByCategoryIdsAndDate(categoryIds, date);
+        return entities.stream()
+                .map(TodoEntity::toDomain)
+                .toList();
+    }
+
     public int countByUserIdAndTargetDate(Long userId, LocalDate targetDate) {
         return todoRepository.countByUserIdAndTargetDate(userId, targetDate);
     }

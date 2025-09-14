@@ -38,8 +38,6 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     """)
     List<TodoEntity> findByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date);
 
-
-
     // 특정 날짜의 전체 투두 개수
     @Query("SELECT COUNT(t) FROM TodoEntity t WHERE t.category.user.id = :userId AND t.targetDate = :targetDate")
     int countByUserIdAndTargetDate(@Param("userId") Long userId, @Param("targetDate") LocalDate targetDate);

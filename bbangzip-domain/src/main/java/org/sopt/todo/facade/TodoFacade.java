@@ -1,6 +1,7 @@
 package org.sopt.todo.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
 import org.sopt.todo.exception.TodoCoreErrorCode;
