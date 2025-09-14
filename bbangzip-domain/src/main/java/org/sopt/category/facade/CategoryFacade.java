@@ -52,8 +52,11 @@ public class CategoryFacade {
         categoryUpdater.updateCategoryOrder(existingCategories, newOrderIds, userId);
     }
 
-    public CategoryEntity getEntityByIdAndUserId(final long categoryId, final long userId) {
-        return categoryRetriever.findEntityByIdAndUserId(categoryId, userId);
+    public List<Category> getActiveCategoriesByUserId(Long userId) {
+        return categoryRetriever.findActiveByUserId(userId)
+                .stream()
+                .map(CategoryEntity::toDomain)
+                .toList();
     }
 
 }

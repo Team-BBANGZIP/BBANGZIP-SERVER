@@ -15,8 +15,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,11 +92,11 @@ public class GlobalExceptionHandler {
             cause = cause.getCause();
         }
 
-        // 날짜 형식 오류 추가 처리
+        // 시간 형식 오류 추가 처리
         if (e.getMessage().contains("Text '")) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(BaseResponse.fail(GlobalErrorCode.INVALID_DATE_FORMAT));
+                    .body(BaseResponse.fail(GlobalErrorCode.INVALID_TIME_FORMAT));
         }
 
         // 기본 처리
@@ -140,6 +142,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(GlobalErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
             .body(BaseResponse.fail(GlobalErrorCode.INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<BaseResponse<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException e) {
+        log.warn("[TypeMismatchException] {}", e.getMessage());
+
+        if (e.getRequiredType() == LocalDate.class) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(BaseResponse.fail(GlobalErrorCode.INVALID_DATE_FORMAT));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE));
     }
 
 }

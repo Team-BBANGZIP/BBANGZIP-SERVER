@@ -6,7 +6,6 @@ import org.sopt.category.domain.CategoryEntity;
 import org.sopt.category.exception.CategoryNotFoundException;
 import org.sopt.category.repository.CategoryRepository;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 import static org.sopt.category.exception.CategoryCoreErrorCode.CATEGORY_NOT_FOUND;
@@ -35,9 +34,7 @@ public class CategoryRetriever {
         return categoryEntity.toDomain();
     }
 
-    public CategoryEntity findEntityByIdAndUserId(final long categoryId, final long userId) {
-        return categoryRepository.findByIdAndUserId(categoryId, userId)
-                .orElseThrow(() -> new CategoryNotFoundException(CATEGORY_NOT_FOUND));
+    public List<CategoryEntity> findActiveByUserId(Long userId) {
+        return categoryRepository.findActiveByUserId(userId);
     }
-
 }

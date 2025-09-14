@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -28,5 +29,9 @@ public class TodoFacade {
 
     public int getTodoCountByCategoryAndDate(Long categoryId, LocalDate targetDate) {
         return todoRetriever.countByCategoryIdAndTargetDate(categoryId, targetDate);
+    }
+
+    public List<Todo> getTodosByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date) {
+        return todoRetriever.findTodosByCategoryIdsAndDate(categoryIds, date);
     }
 }
