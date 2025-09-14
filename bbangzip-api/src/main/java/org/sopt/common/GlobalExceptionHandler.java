@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.code.ErrorCode;
 import org.sopt.code.GlobalErrorCode;
+import org.sopt.exception.AuthBaseException;
 import org.sopt.exception.BbangzipBaseException;
 import org.sopt.response.BaseResponse;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,14 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AuthBaseException.class)
+    public ResponseEntity<BaseResponse<Void>> handleAuthBaseException(AuthBaseException e) {
+        log.warn("[AuthBaseException] {}", e.getMessage());
+        return ResponseEntity
+                .status(e.getErrorCode().getHttpStatus())
+                .body(BaseResponse.fail(e.getErrorCode()));
+    }
 
     // @Valid 실패 시 예외
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -112,6 +121,12 @@ public class GlobalExceptionHandler {
             return ResponseEntity
                 .status(coreEx.getErrorCode().getHttpStatus())
                 .body(BaseResponse.fail(coreEx.getErrorCode()));
+        }
+
+        if (e instanceof org.sopt.user.exception.UserCoreException userCoreEx) {
+            return ResponseEntity
+                    .status(userCoreEx.getErrorCode().getHttpStatus())
+                    .body(BaseResponse.fail(userCoreEx.getErrorCode()));
         }
 
         return ResponseEntity
