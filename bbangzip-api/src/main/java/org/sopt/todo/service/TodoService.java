@@ -5,8 +5,10 @@ import org.sopt.category.domain.Category;
 import org.sopt.category.facade.CategoryFacade;
 import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
+import org.sopt.todo.domain.dto.TodoDeleteResult;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.res.TodoCreateRes;
+import org.sopt.todo.dto.res.TodoDeleteRes;
 import org.sopt.todo.dto.res.TodoListRes;
 import org.sopt.todo.facade.TodoFacade;
 import org.sopt.user.facade.UserFacade;
@@ -88,5 +90,13 @@ public class TodoService {
                 ),
                 categoryDtos
         );
+    }
+
+    @Transactional
+    public TodoDeleteRes deleteTodo(final long  userId, final long todoId) {
+        userFacade.getUserById(userId);
+        // Facade 호출 → Domain DTO 반환
+        TodoDeleteResult todoDeleteResult = todoFacade.deleteTodoAndGetCounts(userId, todoId);
+        return new TodoDeleteRes(todoDeleteResult.completedCount(), todoDeleteResult.totalCount());
     }
 }
