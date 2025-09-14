@@ -57,7 +57,6 @@ public class TodoEntity extends BaseTimeEntity {
     @Column(name = COLUMN_ORDER, nullable = false)
     private int order;
 
-
     public static TodoEntity forCreate(
             String content,
             CategoryEntity category,
