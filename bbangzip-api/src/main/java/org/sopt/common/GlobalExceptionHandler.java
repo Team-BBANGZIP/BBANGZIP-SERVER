@@ -111,22 +111,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseResponse<Void>> handleBbangzipBaseException(BbangzipBaseException e) {
         log.warn("[BbangzipBaseException] {}", e.getMessage());
 
-        if (e instanceof org.sopt.category.exception.CategoryApiException apiEx) {
+        ErrorCode errorCode = e.getErrorCode();
+        if (errorCode != null) {
             return ResponseEntity
-                .status(apiEx.getErrorCode().getHttpStatus())
-                .body(BaseResponse.fail(apiEx.getErrorCode()));
-        }
-
-        if (e instanceof org.sopt.category.exception.CategoryCoreException coreEx) {
-            return ResponseEntity
-                .status(coreEx.getErrorCode().getHttpStatus())
-                .body(BaseResponse.fail(coreEx.getErrorCode()));
-        }
-
-        if (e instanceof org.sopt.user.exception.UserCoreException userCoreEx) {
-            return ResponseEntity
-                    .status(userCoreEx.getErrorCode().getHttpStatus())
-                    .body(BaseResponse.fail(userCoreEx.getErrorCode()));
+                    .status(errorCode.getHttpStatus())
+                    .body(BaseResponse.fail(errorCode));
         }
 
         return ResponseEntity
