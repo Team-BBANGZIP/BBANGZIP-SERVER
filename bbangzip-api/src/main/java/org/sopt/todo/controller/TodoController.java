@@ -5,14 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.code.SuccessCode;
 import org.sopt.response.BaseResponse;
 import org.sopt.todo.dto.req.TodoCreateReq;
+import org.sopt.todo.dto.req.TodoUpdateContentReq;
 import org.sopt.todo.dto.res.TodoCreateRes;
 import org.sopt.todo.dto.res.TodoDeleteRes;
 import org.sopt.todo.dto.res.TodoListRes;
+import org.sopt.todo.dto.res.TodoUpdateContentRes;
 import org.sopt.todo.service.TodoService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -43,6 +44,18 @@ public class TodoController {
     ) {
         Long dummyUserId = 1L;
         return ResponseEntity.ok(todoService.getTodosByDate(dummyUserId, date));
+    }
+
+    @PatchMapping("/{todoId}")
+    public ResponseEntity<Void> updateTodoContent(
+            @PathVariable final long todoId,
+            @Valid @RequestBody final TodoUpdateContentReq todoUpdateContentReq
+            // TODO: 커스텀 어노테이션 final Long userId,
+    ) {
+        Long dummyUserId = 1L;
+
+        todoService.updateTodoContent(dummyUserId, todoId, todoUpdateContentReq);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{todoId}")
