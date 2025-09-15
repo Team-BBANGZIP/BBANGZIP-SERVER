@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum TodoCoreErrorCode implements ErrorCode {
 
-    TODO_NOT_FOUND(HttpStatus.NOT_FOUND, 40403, "투두를 찾을 수 없습니다.")
+    TODO_NOT_FOUND(HttpStatus.NOT_FOUND, 40406, "투두를 찾을 수 없습니다."),
+    INVALID_TODO_CONTENT(HttpStatus.BAD_REQUEST, 40013, "투두 내용은 0자일 수 없습니다.")
     ;
 
     private final HttpStatus httpStatus;

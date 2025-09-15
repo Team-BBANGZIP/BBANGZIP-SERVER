@@ -87,4 +87,8 @@ public class TodoEntity extends BaseTimeEntity {
                 .build();
     }
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
 }
