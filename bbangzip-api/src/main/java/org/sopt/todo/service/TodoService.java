@@ -7,9 +7,11 @@ import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
 import org.sopt.todo.dto.req.TodoCreateReq;
+import org.sopt.todo.dto.req.TodoUpdateContentReq;
 import org.sopt.todo.dto.res.TodoCreateRes;
 import org.sopt.todo.dto.res.TodoDeleteRes;
 import org.sopt.todo.dto.res.TodoListRes;
+import org.sopt.todo.dto.res.TodoUpdateContentRes;
 import org.sopt.todo.facade.TodoFacade;
 import org.sopt.user.facade.UserFacade;
 import org.springframework.stereotype.Service;
@@ -90,6 +92,11 @@ public class TodoService {
                 ),
                 categoryDtos
         );
+    }
+
+    public TodoUpdateContentRes updateTodoContent(Long userId, Long todoId, TodoUpdateContentReq todoUpdateContentReq) {
+        TodoEntity updated = todoFacade.updateTodoContent(userId, todoId, todoUpdateContentReq.content());
+        return new TodoUpdateContentRes(updated.getId(), updated.getContent());
     }
 
     @Transactional
