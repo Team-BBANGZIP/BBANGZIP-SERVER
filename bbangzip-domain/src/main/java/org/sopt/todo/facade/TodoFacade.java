@@ -22,6 +22,7 @@ public class TodoFacade {
     private final TodoRetriever todoRetriever;
     private final TodoSaver todoSaver;
     private final TodoRemover todoRemover;
+    private final TodoUpdater todoUpdater;
 
     public TodoEntity saveTodo(
             Long categoryId,
@@ -40,6 +41,10 @@ public class TodoFacade {
 
     public List<Todo> getTodosByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date) {
         return todoRetriever.findTodosByCategoryIdsAndDate(categoryIds, date);
+    }
+
+    public TodoEntity updateTodoContent(Long userId, Long todoId, String content) {
+        return todoUpdater.updateContent(userId, todoId, content);
     }
 
     @Transactional
