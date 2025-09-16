@@ -3,13 +3,13 @@ package org.sopt.todo.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.code.SuccessCode;
+import org.sopt.jwt.annotation.UserId;
 import org.sopt.response.BaseResponse;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.req.TodoUpdateContentReq;
 import org.sopt.todo.dto.res.TodoCreateRes;
 import org.sopt.todo.dto.res.TodoDeleteRes;
 import org.sopt.todo.dto.res.TodoListRes;
-import org.sopt.todo.dto.res.TodoUpdateContentRes;
 import org.sopt.todo.service.TodoService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -27,46 +27,38 @@ public class TodoController {
 
     @PostMapping
     public ResponseEntity<BaseResponse<TodoCreateRes>> createTodo(
-            // TODO: 커스텀 어노테이션 final Long userId,
+            @UserId Long userId,
             @Valid @RequestBody final TodoCreateReq todoCreateReq
     ) {
-        Long dummyUserId = 1L;
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(BaseResponse.success(SuccessCode.CREATED, todoService.createTodo(dummyUserId, todoCreateReq)));
+                .body(BaseResponse.success(SuccessCode.CREATED, todoService.createTodo(userId, todoCreateReq)));
     }
 
     @GetMapping
     public ResponseEntity<TodoListRes> getTodosByDate(
-            // TODO: 커스텀 어노테이션 final Long userId,
+            @UserId Long userId,
             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
-        Long dummyUserId = 1L;
-        return ResponseEntity.ok(todoService.getTodosByDate(dummyUserId, date));
+        return ResponseEntity.ok(todoService.getTodosByDate(userId, date));
     }
 
     @PatchMapping("/{todoId}")
     public ResponseEntity<Void> updateTodoContent(
+            @UserId Long userId,
             @PathVariable final long todoId,
             @Valid @RequestBody final TodoUpdateContentReq todoUpdateContentReq
-            // TODO: 커스텀 어노테이션 final Long userId,
     ) {
-        Long dummyUserId = 1L;
-
-        todoService.updateTodoContent(dummyUserId, todoId, todoUpdateContentReq);
+        todoService.updateTodoContent(userId, todoId, todoUpdateContentReq);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{todoId}")
     public ResponseEntity<TodoDeleteRes>  deleteTodo(
+            @UserId Long userId,
             @PathVariable("todoId") final Long todoId
-            // TODO: 커스텀 어노테이션 final Long userId,
     ) {
-        Long dummyUserId = 1L;
-
-        TodoDeleteRes deleteRes = todoService.deleteTodo(dummyUserId, todoId);
-
+        TodoDeleteRes deleteRes = todoService.deleteTodo(userId, todoId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(deleteRes);
