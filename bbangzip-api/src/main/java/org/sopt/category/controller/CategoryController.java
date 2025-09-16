@@ -8,6 +8,7 @@ import org.sopt.category.dto.req.CategoryUpdateReq;
 import org.sopt.category.dto.res.CategoryCreateRes;
 import org.sopt.category.dto.res.CategoryRes;
 import org.sopt.category.service.CategoryService;
+import org.sopt.jwt.annotation.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,52 +31,45 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryCreateRes> createCategory(
-            // TODO: 커스텀 어노테이션 final Long userId,
+            @UserId Long userId,
             @Valid @RequestBody final CategoryCreateReq categoryCreateReq
     ) {
-        Long dummyUserId = 1L;
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(categoryService.createCategory(dummyUserId, categoryCreateReq));
+                .body(categoryService.createCategory(userId, categoryCreateReq));
     }
-
 
     @GetMapping
     public ResponseEntity<List<CategoryRes>> getAllCategories(
-            // TODO: 커스텀 어노테이션 final Long userId,
+            @UserId Long userId
     ) {
-        Long dummyUserId = 1L;
-        return ResponseEntity.ok(categoryService.getAllCategories(dummyUserId));
+        return ResponseEntity.ok(categoryService.getAllCategories(userId));
     }
 
     @PatchMapping("/{categoryId}")
     public ResponseEntity<CategoryRes> updateCategory(
+            @UserId Long userId,
             @PathVariable final Long categoryId,
-            // TODO: 커스텀 어노테이션 final Long userId,
             @Valid @RequestBody final CategoryUpdateReq categoryUpdateReq
     ) {
-        Long dummyUserId = 1L;
-        return ResponseEntity.ok(categoryService.updateCategory(dummyUserId, categoryId, categoryUpdateReq));
+        return ResponseEntity.ok(categoryService.updateCategory(userId, categoryId, categoryUpdateReq));
     }
 
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<Void> deleteCategory(
+            @UserId Long userId,
             @PathVariable final Long categoryId
-            // TODO: 커스텀 어노테이션 final Long userId,
     ) {
-        Long dummyUserId = 1L;
-        categoryService.deleteCategory(dummyUserId, categoryId);
+        categoryService.deleteCategory(userId, categoryId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/order")
     public ResponseEntity<Void> reorderCategory(
-            // TODO: 커스텀 어노테이션 final Long userId,
+            @UserId Long userId,
             @Valid @RequestBody final CategoryReorderReq categoryReorderReq
     ) {
-        Long dummyUserId = 1L;
-        categoryService.reorderCategory(dummyUserId, categoryReorderReq.categoryOrder());
+        categoryService.reorderCategory(userId, categoryReorderReq.categoryOrder());
         return ResponseEntity.ok().build();
     }
 
