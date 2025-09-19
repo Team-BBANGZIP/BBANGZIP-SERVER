@@ -8,10 +8,7 @@ import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.req.TodoUpdateContentReq;
-import org.sopt.todo.dto.res.TodoCreateRes;
-import org.sopt.todo.dto.res.TodoDeleteRes;
-import org.sopt.todo.dto.res.TodoListRes;
-import org.sopt.todo.dto.res.TodoUpdateContentRes;
+import org.sopt.todo.dto.res.*;
 import org.sopt.todo.facade.TodoFacade;
 import org.sopt.user.facade.UserFacade;
 import org.springframework.stereotype.Service;
@@ -97,6 +94,18 @@ public class TodoService {
     public TodoUpdateContentRes updateTodoContent(Long userId, Long todoId, TodoUpdateContentReq todoUpdateContentReq) {
         TodoEntity updated = todoFacade.updateTodoContent(userId, todoId, todoUpdateContentReq.content());
         return new TodoUpdateContentRes(updated.getId(), updated.getContent());
+    }
+
+    @Transactional
+    public TodoCompletionRes updateTodoCompletion(Long userId, Long todoId, boolean isCompleted) {
+
+        todoFacade.updateTodoCompletion(userId, todoId, isCompleted);
+
+        LocalDate targetDate = todoFacade.targetDateOf(todoId, userId);
+        int completedCount = todoFacade.countCompletedByUserIdAndDate(userId, targetDate);
+        int totalCount = todoFacade.countTotalByUserIdAndDate(userId, targetDate);
+
+        return new TodoCompletionRes(todoId, isCompleted, completedCount, totalCount);
     }
 
     @Transactional
