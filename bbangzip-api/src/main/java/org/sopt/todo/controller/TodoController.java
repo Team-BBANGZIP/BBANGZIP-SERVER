@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.code.SuccessCode;
 import org.sopt.jwt.annotation.UserId;
 import org.sopt.response.BaseResponse;
+import org.sopt.todo.dto.req.TodoCompletionReq;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.req.TodoUpdateContentReq;
+import org.sopt.todo.dto.res.TodoCompletionRes;
 import org.sopt.todo.dto.res.TodoCreateRes;
 import org.sopt.todo.dto.res.TodoDeleteRes;
 import org.sopt.todo.dto.res.TodoListRes;
@@ -53,15 +55,23 @@ public class TodoController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{todoId}/completion")
+    public ResponseEntity<TodoCompletionRes> updateTodoCompletion(
+            @UserId Long userId,
+            @PathVariable final Long todoId,
+            @RequestBody final TodoCompletionReq todoCompletionReq
+    ) {
+        return ResponseEntity.ok(todoService.updateTodoCompletion(userId, todoId, todoCompletionReq.isCompleted()));
+    }
+
     @DeleteMapping("/{todoId}")
     public ResponseEntity<TodoDeleteRes>  deleteTodo(
             @UserId Long userId,
             @PathVariable("todoId") final Long todoId
     ) {
-        TodoDeleteRes deleteRes = todoService.deleteTodo(userId, todoId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(deleteRes);
+                .body(todoService.deleteTodo(userId, todoId));
     }
 
 }
