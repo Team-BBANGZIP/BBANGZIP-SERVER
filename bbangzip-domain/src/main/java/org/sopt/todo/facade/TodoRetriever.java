@@ -31,12 +31,12 @@ public class TodoRetriever {
                 .toList();
     }
 
-    public int countByUserIdAndTargetDate(Long userId, LocalDate targetDate) {
-        return todoRepository.countByUserIdAndTargetDate(userId, targetDate);
+    public int countTotalByUserIdAndDate(Long userId, LocalDate targetDate) {
+        return todoRepository.countTotalByUserIdAndDate(userId, targetDate);
     }
 
-    public int countCompletedByUserIdAndTargetDate(Long userId, LocalDate targetDate) {
-        return todoRepository.countCompletedByUserIdAndTargetDate(userId, targetDate);
+    public int countCompletedByUserIdAndDate(Long userId, LocalDate targetDate) {
+        return todoRepository.countCompletedByUserIdAndDate(userId, targetDate);
     }
 
     public Optional<TodoEntity> findByIdAndUserId(Long todoId, Long userId) {
