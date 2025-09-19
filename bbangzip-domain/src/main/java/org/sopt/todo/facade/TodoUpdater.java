@@ -30,4 +30,13 @@ public class TodoUpdater {
         todo.updateContent(content);
         return todo;
     }
+
+    @Transactional
+    public TodoEntity updateCompletion(Long userId, Long todoId, boolean isCompleted) {
+        TodoEntity todo = todoRepository.findByIdAndUserId(todoId, userId)
+                .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+
+        todo.updateCompletion(isCompleted);
+        return todo;
+    }
 }
