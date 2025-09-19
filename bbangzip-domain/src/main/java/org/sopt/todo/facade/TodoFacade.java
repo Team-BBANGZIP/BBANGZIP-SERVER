@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
-import org.sopt.todo.exception.TodoCoreErrorCode;
 import org.sopt.todo.exception.TodoNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +47,25 @@ public class TodoFacade {
     }
 
     @Transactional
+    public void updateTodoCompletion(Long userId, Long todoId, boolean isCompleted) {
+        todoUpdater.updateCompletion(userId, todoId, isCompleted);
+    }
+
+    public int countTotalByUserIdAndDate(Long userId, LocalDate date) {
+        return todoRetriever.countTotalByUserIdAndDate(userId, date);
+    }
+
+    public int countCompletedByUserIdAndDate(Long userId, LocalDate date) {
+        return todoRetriever.countCompletedByUserIdAndDate(userId, date);
+    }
+
+    public LocalDate targetDateOf(Long todoId, Long userId) {
+        return todoRetriever.findByIdAndUserId(todoId, userId)
+                .map(TodoEntity::getTargetDate)
+                .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+    }
+
+    @Transactional
     public TodoDeleteResult deleteTodoAndGetCounts(Long userId, Long todoId) {
         //  삭제할 투두 조회 (삭제 전 날짜 파악)
         TodoEntity todo = todoRetriever.findByIdAndUserId(todoId, userId)
@@ -57,8 +75,8 @@ public class TodoFacade {
         todoRemover.remove(userId, todoId);
 
         //  해당 날짜 기준으로 남은 개수 계산
-        int completedCount = todoRetriever.countCompletedByUserIdAndTargetDate(userId, targetDate);
-        int totalCount = todoRetriever.countByUserIdAndTargetDate(userId, targetDate);
+        int completedCount = todoRetriever.countCompletedByUserIdAndDate(userId, targetDate);
+        int totalCount = todoRetriever.countTotalByUserIdAndDate(userId, targetDate);
 
         return new TodoDeleteResult(completedCount, totalCount);
     }

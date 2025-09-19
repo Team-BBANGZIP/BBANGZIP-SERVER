@@ -91,4 +91,8 @@ public class TodoEntity extends BaseTimeEntity {
         this.content = content;
     }
 
+    public void updateCompletion(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
 }
