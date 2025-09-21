@@ -8,6 +8,7 @@ import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.req.TodoUpdateContentReq;
+import org.sopt.todo.dto.req.TodoUpdateStartTimeReq;
 import org.sopt.todo.dto.res.*;
 import org.sopt.todo.facade.TodoFacade;
 import org.sopt.user.facade.UserFacade;
@@ -114,5 +115,11 @@ public class TodoService {
         // Facade 호출 → Domain DTO 반환
         TodoDeleteResult todoDeleteResult = todoFacade.deleteTodoAndGetCounts(userId, todoId);
         return new TodoDeleteRes(todoDeleteResult.completedCount(), todoDeleteResult.totalCount());
+    }
+
+    @Transactional
+    public TodoUpdateStartTimeRes updateTodoStartTime(Long userId, Long todoId, TodoUpdateStartTimeReq todoUpdateStartTimeReq) {
+        TodoEntity updated = todoFacade.updateStartTime(userId, todoId, todoUpdateStartTimeReq.startTime());
+        return new TodoUpdateStartTimeRes(updated.getId(), updated.getStartTime());
     }
 }
