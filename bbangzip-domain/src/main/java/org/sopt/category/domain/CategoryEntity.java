@@ -80,11 +80,11 @@ public class CategoryEntity extends BaseTimeEntity {
         return categoryEntity;
     }
 
-    public void update(String newName, CategoryColor newColor, boolean newIsStopped, int newOrder) {
-        this.name = newName;
-        this.color = newColor;
-        this.isStopped = newIsStopped;
-        this.order = newOrder;
+    public void update(String newName, CategoryColor newColor, Boolean newIsStopped, int order) {
+        if (newName != null) this.name = newName;
+        if (newColor != null) this.color = newColor;
+        if (newIsStopped != null) this.isStopped = newIsStopped;
+        this.order = order;
     }
 
     public void updateOrder(int newOrder) {
