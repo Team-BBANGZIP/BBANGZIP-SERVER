@@ -80,4 +80,9 @@ public class TodoFacade {
 
         return new TodoDeleteResult(completedCount, totalCount);
     }
+
+    public TodoEntity updateStartTime(Long userId, Long todoId, LocalTime startTime) {
+        return todoUpdater.updateStartTime(userId, todoId, startTime);
+    }
+
 }
