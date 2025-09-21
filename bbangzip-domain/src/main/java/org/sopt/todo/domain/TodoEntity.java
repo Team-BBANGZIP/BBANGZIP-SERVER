@@ -95,4 +95,8 @@ public class TodoEntity extends BaseTimeEntity {
         this.isCompleted = isCompleted;
     }
 
+    public void updateStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
 }
