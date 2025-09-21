@@ -8,10 +8,8 @@ import org.sopt.response.BaseResponse;
 import org.sopt.todo.dto.req.TodoCompletionReq;
 import org.sopt.todo.dto.req.TodoCreateReq;
 import org.sopt.todo.dto.req.TodoUpdateContentReq;
-import org.sopt.todo.dto.res.TodoCompletionRes;
-import org.sopt.todo.dto.res.TodoCreateRes;
-import org.sopt.todo.dto.res.TodoDeleteRes;
-import org.sopt.todo.dto.res.TodoListRes;
+import org.sopt.todo.dto.req.TodoUpdateStartTimeReq;
+import org.sopt.todo.dto.res.*;
 import org.sopt.todo.service.TodoService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -74,4 +72,12 @@ public class TodoController {
                 .body(todoService.deleteTodo(userId, todoId));
     }
 
+    @PatchMapping("/{todoId}/start-time")
+    public ResponseEntity<TodoUpdateStartTimeRes> updateTodoStartTime(
+            @UserId Long userId,
+            @PathVariable Long todoId,
+            @RequestBody @Valid TodoUpdateStartTimeReq todoUpdateStartTimeReq
+    ) {
+        return ResponseEntity.ok(todoService.updateTodoStartTime(userId, todoId, todoUpdateStartTimeReq));
+    }
 }
