@@ -55,6 +55,7 @@ public class UserEntity extends BaseTimeEntity {
     public User toDomain() {
         return User.builder()
                 .id(id)
+                .userRole(userRole)
                 .platformUserId(platformUserId)
                 .platform(platform)
                 .nickname(nickname)

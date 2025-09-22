@@ -2,6 +2,9 @@ package org.sopt.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+
+import org.sopt.jwt.auth.authentication.UserRole;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -9,6 +12,7 @@ import java.time.LocalDateTime;
 public class User {
 
     private final Long id;
+    private final UserRole userRole;
     private final Long platformUserId;
     private final String platform;
     private final String nickname;
@@ -24,6 +28,7 @@ public class User {
     public static User fromEntity(final UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.getId())
+                .userRole(userEntity.getUserRole())
                 .platformUserId(userEntity.getPlatformUserId())
                 .platform(userEntity.getPlatform())
                 .nickname(userEntity.getNickname())
