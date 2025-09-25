@@ -2,8 +2,6 @@ server:
   port: 8080
 
 spring:
-  profiles:
-    active: dev
   datasource:
     url: jdbc:mysql://bbangzipdb.chem0wowwomv.ap-northeast-2.rds.amazonaws.com:3306/bbangzip
     username: ${DB_USERNAME}
