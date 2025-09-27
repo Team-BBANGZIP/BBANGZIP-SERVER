@@ -20,6 +20,14 @@ public class UserFacade {
         return userUpdater.updateCommitmentMessage(user, message);
     }
 
+    public User updateProfile(final long userId,
+                              final Integer profileImageKey,
+                              final String nickname,
+                              final String commitmentMessage) {
+        return userUpdater.updateProfile(userId, profileImageKey, nickname, commitmentMessage);
+    }
+
+
     public UserEntity findByIdForUpdate(final long userId){
         return userUpdater.findByIdForUpdate(userId);
     }

@@ -3,6 +3,7 @@ package org.sopt.user.service;
 import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.User;
 import org.sopt.user.dto.req.CommitmentMessageCreateReq;
+import org.sopt.user.dto.req.UserProfileUpdateReq;
 import org.sopt.user.dto.res.CommitmentMessageRes;
 import org.sopt.user.facade.UserFacade;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,15 @@ public class UserService {
 
         return new CommitmentMessageRes(updated.getCommitmentMessage());
     }
+
+    @Transactional
+    public User updateProfile(final long userId, final UserProfileUpdateReq request) {
+        return userFacade.updateProfile(
+                userId,
+                request.profileImageKey(),
+                request.nickname(),
+                request.commitmentMessage()
+        );
+    }
+
 }
