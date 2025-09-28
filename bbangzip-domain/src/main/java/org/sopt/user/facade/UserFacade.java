@@ -2,6 +2,7 @@ package org.sopt.user.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.User;
+import org.sopt.user.domain.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,5 +18,9 @@ public class UserFacade {
 
     public User saveCommitmentMessage(User user, String message) {
         return userUpdater.updateCommitmentMessage(user, message);
+    }
+
+    public UserEntity findByIdForUpdate(final long userId){
+        return userUpdater.findByIdForUpdate(userId);
     }
 }
