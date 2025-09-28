@@ -1,7 +1,7 @@
 package org.sopt.auth.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.Token.TokenService;
+import org.sopt.token.TokenService;
 import org.sopt.jwt.auth.dto.ReissueTokensRes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
