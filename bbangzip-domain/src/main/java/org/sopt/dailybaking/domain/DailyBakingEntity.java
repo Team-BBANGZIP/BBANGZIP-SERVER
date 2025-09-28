@@ -32,4 +32,16 @@ public class DailyBakingEntity extends BaseTimeEntity {
     @Column(name = COLUMN_BREAD_COUNT, nullable = false)
     private int breadCount;
 
+    public static DailyBakingEntity create(UserEntity user, LocalDateTime bakeDate, int breadCount) {
+        DailyBakingEntity e = new DailyBakingEntity();
+        e.user = user;
+        e.bakeDate = bakeDate;
+        e.breadCount = breadCount;
+        return e;
+    }
+
+    public void increaseCount(int delta) {
+        this.breadCount += delta;
+    }
+
 }
