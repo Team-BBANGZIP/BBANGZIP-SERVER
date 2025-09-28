@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.code.SuccessCode;
 import org.sopt.jwt.annotation.UserId;
 import org.sopt.response.BaseResponse;
-import org.sopt.todo.dto.req.TodoCompletionReq;
-import org.sopt.todo.dto.req.TodoCreateReq;
-import org.sopt.todo.dto.req.TodoUpdateContentReq;
-import org.sopt.todo.dto.req.TodoUpdateStartTimeReq;
+import org.sopt.todo.dto.req.*;
 import org.sopt.todo.dto.res.*;
 import org.sopt.todo.service.TodoService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -79,5 +76,17 @@ public class TodoController {
             @RequestBody @Valid TodoUpdateStartTimeReq todoUpdateStartTimeReq
     ) {
         return ResponseEntity.ok(todoService.updateTodoStartTime(userId, todoId, todoUpdateStartTimeReq));
+    }
+
+    @PostMapping("/{todoId}/repeat")
+    public ResponseEntity<BaseResponse<TodoCreateRes>> rescheduleTodo(
+            @UserId Long userId,
+            @PathVariable Long todoId,
+            @RequestBody @Valid TodoRescheduleReq todoRescheduleReq
+    ) {
+        TodoCreateRes newTodo = todoService.rescheduleTodo(userId, todoId, todoRescheduleReq.getTargetDate());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BaseResponse.success(SuccessCode.CREATED, newTodo));
     }
 }
