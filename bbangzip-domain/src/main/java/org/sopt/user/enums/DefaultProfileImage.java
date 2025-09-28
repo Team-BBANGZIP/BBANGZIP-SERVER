@@ -2,6 +2,8 @@ package org.sopt.user.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.sopt.user.exception.InvalidProfileImageKeyException;
+import org.sopt.user.exception.UserCoreErrorCode;
 
 import java.util.Arrays;
 
@@ -23,7 +25,7 @@ public enum DefaultProfileImage {
         return Arrays.stream(values())
                 .filter(img -> img.key == key)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 profileImageKey 입니다."))
+                .orElseThrow(() -> new InvalidProfileImageKeyException(UserCoreErrorCode.INVALID_PROFILE_IMAGE_KEY))
                 .getUrl();
     }
 }
