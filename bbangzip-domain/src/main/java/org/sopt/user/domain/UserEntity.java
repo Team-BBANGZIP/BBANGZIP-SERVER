@@ -69,4 +69,8 @@ public class UserEntity extends BaseTimeEntity {
                 .build();
     }
 
+    public void increaseTotalBreadCount(int delta) {
+        this.totalBreadCount += delta;
+    }
+
 }

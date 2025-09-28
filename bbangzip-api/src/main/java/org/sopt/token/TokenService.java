@@ -1,4 +1,4 @@
-package org.sopt.Token;
+package org.sopt.token;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;

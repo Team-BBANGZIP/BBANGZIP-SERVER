@@ -21,4 +21,10 @@ public class UserUpdater {
         userRepository.save(userEntity);
         return userEntity.toDomain();
     }
+
+    public UserEntity findByIdForUpdate(final Long userId){
+        return userRepository.findByIdForUpdate(userId)
+                .orElseThrow(() -> new UserNotFoundException(UserCoreErrorCode.USER_NOT_FOUND));
+    }
+
 }
