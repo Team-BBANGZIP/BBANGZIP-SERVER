@@ -52,6 +52,18 @@ public class UserEntity extends BaseTimeEntity {
         this.commitmentMessage = message;
     }
 
+    public void updateProfile(String nickname, String profileImage, String commitmentMessage) {
+        if (nickname != null) {
+            this.nickname = nickname;
+        }
+        if (profileImage != null) {
+            this.profileImage = profileImage;
+        }
+        if (commitmentMessage != null) {
+            this.commitmentMessage = commitmentMessage;
+        }
+    }
+
     public User toDomain() {
         return User.builder()
                 .id(id)
