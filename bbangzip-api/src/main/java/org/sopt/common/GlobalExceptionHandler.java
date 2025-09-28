@@ -19,6 +19,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,33 +79,25 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException e) {
         log.warn("[HttpMessageNotReadableException] {}", e.getMessage());
 
-        // 예외 원인 탐색
         Throwable cause = e.getCause();
         while (cause != null) {
-            if (cause instanceof BbangzipBaseException bbangzipBaseException) {
-                // 도메인 예외로 캐스팅
-                if (bbangzipBaseException instanceof org.sopt.category.exception.CategoryApiException apiEx) {
-                    return ResponseEntity
-                            .status(apiEx.getErrorCode().getHttpStatus())
-                            .body(BaseResponse.fail(apiEx.getErrorCode()));
+            if (cause instanceof DateTimeParseException dtpe) {
+                // 메시지에 "HH:mm" 관련이면 시간 에러, yyyy-MM-dd 관련이면 날짜 에러
+                if (dtpe.getParsedString().contains(":")) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(BaseResponse.fail(GlobalErrorCode.INVALID_TIME_FORMAT));
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(BaseResponse.fail(GlobalErrorCode.INVALID_DATE_FORMAT));
                 }
             }
             cause = cause.getCause();
         }
 
-        // 시간 형식 오류 추가 처리
-        if (e.getMessage().contains("Text '")) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(BaseResponse.fail(GlobalErrorCode.INVALID_TIME_FORMAT));
-        }
-
-        // 기본 처리
         return ResponseEntity
                 .status(GlobalErrorCode.INVALID_INPUT_VALUE.getHttpStatus())
                 .body(BaseResponse.fail(GlobalErrorCode.INVALID_INPUT_VALUE));
     }
-
 
     // BbangzipBaseException (모든 커스텀 예외) 처리 핸들러
     @ExceptionHandler(BbangzipBaseException.class)
