@@ -33,9 +33,9 @@ public class UserController {
     @PatchMapping("/profile")
     public ResponseEntity<UserProfileUpdateRes> updateProfile(
             @UserId Long userId,
-            @Valid @RequestBody UserProfileUpdateReq request
+            @Valid @RequestBody UserProfileUpdateReq userProfileUpdateReq
     ) {
-        User updatedProfile = userService.updateProfile(userId, request);
+        User updatedProfile = userService.updateProfile(userId, userProfileUpdateReq);
         return ResponseEntity
                 .ok(UserProfileUpdateRes.from(updatedProfile));
     }
