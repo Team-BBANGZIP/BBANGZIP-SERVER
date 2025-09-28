@@ -99,4 +99,21 @@ public class TodoEntity extends BaseTimeEntity {
         this.startTime = startTime;
     }
 
+    /**
+     * 다른날 또하기용 팩토리 메서드
+     * - 내용, 카테고리, 시작시간은 그대로
+     * - 완료 여부는 항상 false로 초기화
+     * - 날짜만 새로운 targetDate로 교체
+     */
+    public static TodoEntity forReschedule(TodoEntity original, LocalDate newDate, int order) {
+        return forCreate(
+                original.getContent(),
+                original.getCategory(),
+                newDate,
+                original.getStartTime(),
+                false, // 항상 미완료로 생성
+                order
+        );
+    }
+
 }
