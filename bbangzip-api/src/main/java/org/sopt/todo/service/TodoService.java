@@ -122,4 +122,11 @@ public class TodoService {
         TodoEntity updated = todoFacade.updateStartTime(userId, todoId, todoUpdateStartTimeReq.startTime());
         return new TodoUpdateStartTimeRes(updated.getId(), updated.getStartTime());
     }
+
+    @Transactional
+    public TodoCreateRes rescheduleTodo(Long userId, Long todoId, LocalDate targetDate) {
+        TodoEntity newEntity = todoFacade.reschedule(userId, todoId, targetDate);
+        return TodoCreateRes.from(newEntity.toDomain());
+    }
+
 }

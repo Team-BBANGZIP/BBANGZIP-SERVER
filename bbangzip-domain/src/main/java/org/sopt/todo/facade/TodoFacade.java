@@ -85,4 +85,15 @@ public class TodoFacade {
         return todoUpdater.updateStartTime(userId, todoId, startTime);
     }
 
+    @Transactional
+    public TodoEntity reschedule(Long userId, Long todoId, LocalDate targetDate) {
+        TodoEntity origin = todoRetriever.findByIdAndUserId(todoId, userId)
+                .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+
+        // 새 날짜의 order 계산
+        int newOrder = todoRetriever.countTotalByUserIdAndDate(userId, targetDate);
+
+        return todoUpdater.reschedule(origin, targetDate, newOrder);
+    }
+
 }
