@@ -1,7 +1,6 @@
 package org.sopt.todo.facade;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.todo.exception.TodoCoreErrorCode;
 import org.sopt.todo.exception.TodoNotFoundException;
 import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
