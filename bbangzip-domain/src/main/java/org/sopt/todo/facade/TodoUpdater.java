@@ -8,6 +8,7 @@ import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.sopt.todo.exception.TodoCoreErrorCode.INVALID_TODO_CONTENT;
@@ -46,5 +47,10 @@ public class TodoUpdater {
     private TodoEntity getTodoOrThrow(Long userId, Long todoId) {
         return todoRepository.findByIdAndUserId(todoId, userId)
                 .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+    }
+
+    public TodoEntity reschedule(TodoEntity original, LocalDate targetDate, int newOrder) {
+        TodoEntity newTodo = TodoEntity.forReschedule(original, targetDate, newOrder);
+        return todoRepository.save(newTodo);
     }
 }
