@@ -129,4 +129,9 @@ public class TodoService {
         return TodoCreateRes.from(newEntity.toDomain());
     }
 
+    @Transactional
+    public TodoCreateRes copyTodo(Long userId, Long todoId) {
+        TodoEntity copiedTodo = todoFacade.copyTodo(userId, todoId);
+        return TodoCreateRes.from(copiedTodo.toDomain());
+    }
 }
