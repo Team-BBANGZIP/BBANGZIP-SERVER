@@ -89,4 +89,15 @@ public class TodoController {
                 .status(HttpStatus.CREATED)
                 .body(BaseResponse.success(SuccessCode.CREATED, newTodo));
     }
+
+    @PostMapping("/{todoId}/copy")
+    public ResponseEntity<BaseResponse<TodoCreateRes>> copyTodo(
+            @UserId Long userId,
+            @PathVariable Long todoId
+    ) {
+        TodoCreateRes copiedTodo = todoService.copyTodo(userId, todoId);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BaseResponse.success(SuccessCode.CREATED, copiedTodo));
+    }
 }
