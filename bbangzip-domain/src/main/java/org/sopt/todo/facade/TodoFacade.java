@@ -96,4 +96,22 @@ public class TodoFacade {
         return todoUpdater.reschedule(origin, targetDate, newOrder);
     }
 
+    @Transactional
+    public TodoEntity copyTodo(Long userId, Long todoId) {
+
+        TodoEntity originalTodo = todoRetriever.findByIdAndUserId(todoId, userId)
+                .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+
+        int order = todoRetriever.countTotalByUserIdAndDate(userId, originalTodo.getTargetDate());
+
+        TodoEntity copiedTodo = todoSaver.saveCopiedTodo(
+                originalTodo.getCategory().getId(),
+                originalTodo.getContent(),
+                originalTodo.getTargetDate(),
+                order
+        );
+
+        return copiedTodo;
+    }
+
 }
