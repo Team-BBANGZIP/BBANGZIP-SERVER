@@ -40,4 +40,25 @@ public class TodoSaver {
         );
         return todoRepository.save(entity);
     }
+
+    // 복제된 투두 저장
+    public TodoEntity saveCopiedTodo(
+            Long categoryId,
+            String content,
+            LocalDate targetDate,
+            int order
+    ) {
+        CategoryEntity categoryRef = categoryRepository.getReferenceById(categoryId);
+
+        TodoEntity entity = TodoEntity.forCreate(
+                content,
+                categoryRef,
+                targetDate,
+                null,  // 복제 시 startTime은 null로 처리
+                false, // isCompleted는 false로 설정
+                order
+        );
+
+        return todoRepository.save(entity);
+    }
 }
