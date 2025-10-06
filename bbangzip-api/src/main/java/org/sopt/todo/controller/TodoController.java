@@ -79,12 +79,12 @@ public class TodoController {
     }
 
     @PostMapping("/{todoId}/repeat")
-    public ResponseEntity<BaseResponse<TodoCreateRes>> rescheduleTodo(
+    public ResponseEntity<BaseResponse<TodoCreateRes>> repeatTodo(
             @UserId Long userId,
             @PathVariable Long todoId,
-            @RequestBody @Valid TodoRescheduleReq todoRescheduleReq
+            @RequestBody @Valid TodoRepeatReq todoRepeatReq
     ) {
-        TodoCreateRes newTodo = todoService.rescheduleTodo(userId, todoId, todoRescheduleReq.getTargetDate());
+        TodoCreateRes newTodo = todoService.repeatTodo(userId, todoId, todoRepeatReq.getTargetDate());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(BaseResponse.success(SuccessCode.CREATED, newTodo));
@@ -95,9 +95,19 @@ public class TodoController {
             @UserId Long userId,
             @PathVariable Long todoId
     ) {
-        TodoCreateRes copiedTodo = todoService.copyTodo(userId, todoId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(BaseResponse.success(SuccessCode.CREATED, copiedTodo));
+                .body(BaseResponse.success(SuccessCode.CREATED, todoService.copyTodo(userId, todoId)));
+    }
+
+    @PostMapping("/{todoId}/reschedule")
+    public ResponseEntity<BaseResponse<TodoCreateRes>> rescheduleTodo(
+            @UserId Long userId,
+            @PathVariable Long todoId,
+            @Valid @RequestBody TodoRescheduleReq todoRescheduleReq
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(BaseResponse.success(SuccessCode.CREATED, todoService.rescheduleTodo(userId, todoId, todoRescheduleReq)));
     }
 }
