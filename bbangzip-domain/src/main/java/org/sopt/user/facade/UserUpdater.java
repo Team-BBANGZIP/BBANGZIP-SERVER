@@ -3,7 +3,7 @@ package org.sopt.user.facade;
 import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.User;
 import org.sopt.user.domain.UserEntity;
-import org.sopt.user.enums.DefaultProfileImage;
+import org.sopt.user.type.DefaultProfileImage;
 import org.sopt.user.exception.UserCoreErrorCode;
 import org.sopt.user.exception.UserNotFoundException;
 import org.sopt.user.repository.UserRepository;

@@ -2,8 +2,8 @@ package org.sopt.user.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import org.sopt.jwt.auth.authentication.UserRole;
+import org.sopt.user.type.RegisterStatus;
 
 import java.time.LocalDateTime;
 
@@ -13,8 +13,10 @@ public class User {
 
     private final Long id;
     private final UserRole userRole;
-    private final Long platformUserId;
-    private final String platform;
+    private final String provider;
+    private final String providerId;
+    private final RegisterStatus registerStatus;
+    private final Boolean isDeleted;
     private final String nickname;
     private final String profileImage;
     private final String commitmentMessage;
@@ -24,13 +26,14 @@ public class User {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-
     public static User fromEntity(final UserEntity userEntity) {
         return User.builder()
                 .id(userEntity.getId())
                 .userRole(userEntity.getUserRole())
-                .platformUserId(userEntity.getPlatformUserId())
-                .platform(userEntity.getPlatform())
+                .provider(userEntity.getProvider())
+                .providerId(userEntity.getProviderId())
+                .registerStatus(userEntity.getRegisterStatus())
+                .isDeleted(userEntity.getIsDeleted())
                 .nickname(userEntity.getNickname())
                 .profileImage(userEntity.getProfileImage())
                 .commitmentMessage(userEntity.getCommitmentMessage())

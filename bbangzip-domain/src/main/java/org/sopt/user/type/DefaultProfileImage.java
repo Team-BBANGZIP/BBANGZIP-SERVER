@@ -1,4 +1,4 @@
-package org.sopt.user.enums;
+package org.sopt.user.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

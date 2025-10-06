@@ -7,7 +7,4 @@ public class UserNotFoundException extends UserCoreException {
         super(errorCode);
     }
 
-    public UserNotFoundException(ErrorCode errorCode, String detailMessage) {
-        super(errorCode, detailMessage);
-    }
 }

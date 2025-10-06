@@ -8,6 +8,8 @@ import org.sopt.user.exception.UserNotFoundException;
 import org.sopt.user.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Component
 public class UserRetriever {
@@ -20,4 +22,9 @@ public class UserRetriever {
 
         return userEntity.toDomain();
     }
+
+    public Optional<UserEntity> findByProviderAndProviderId(final String provider, final String providerId){
+        return userRepository.findByProviderAndProviderId(provider, providerId);
+    };
+
 }

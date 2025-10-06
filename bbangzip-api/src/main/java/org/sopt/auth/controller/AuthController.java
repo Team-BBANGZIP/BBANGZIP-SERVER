@@ -1,14 +1,15 @@
 package org.sopt.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.sopt.auth.dto.SocialLoginReq;
+import org.sopt.auth.dto.SocialLoginRes;
 import org.sopt.auth.service.AuthService;
 import org.sopt.jwt.auth.dto.ReissueTokensRes;
 import org.sopt.jwt.core.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +18,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @PostMapping("/signin")
+    public ResponseEntity<SocialLoginRes> socialLogin(
+            @RequestHeader("Provider-Token") String providerToken,
+            @Valid @RequestBody SocialLoginReq req
+    ) {
+        SocialLoginRes res = authService.socialLogin(providerToken, req);
+        return ResponseEntity.ok(res);
+    }
 
     @PostMapping("/re-issue")
     public ResponseEntity<ReissueTokensRes> reissue(

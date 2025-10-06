@@ -1,4 +1,4 @@
-package org.sopt.user.exception;
+package org.sopt.auth.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserCoreErrorCode implements ErrorCode {
+public  enum AuthApiErrorCode implements ErrorCode {
 
     // 400
-    INVALID_PROFILE_IMAGE_KEY(HttpStatus.BAD_REQUEST,40014, "잘못된 profileImageKey 입니다."),
-    INVALID_REGISTER_STATUS_TYPE(HttpStatus.BAD_REQUEST, 40416, "올바르지 않은 가입 타입입니다."),
+    INVALID_PROVIDER(HttpStatus.BAD_REQUEST, 40015, "지원하지 않는 Provider입니다."),
 
-    // 404
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, 40401, "사용자를 찾을 수 없습니다.");
+    // 503
+    AUTH_APPLE_SERVER_ERROR(HttpStatus.SERVICE_UNAVAILABLE, 50300, "애플 로그인에서 에러가 발생했습니다."),
+    ;
 
     private final HttpStatus httpStatus;
     private final int code;

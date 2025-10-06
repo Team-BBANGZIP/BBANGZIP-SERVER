@@ -2,6 +2,8 @@ package org.sopt.token;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.sopt.auth.dto.SocialLoginReq;
+import org.sopt.auth.dto.SocialLoginRes;
 import org.sopt.exception.AuthErrorCode;
 import org.sopt.exception.InvalidTokenException;
 import org.sopt.exception.TokenNotFoundException;
@@ -15,6 +17,7 @@ import org.sopt.jwt.core.JwtTokenProvider;
 import org.sopt.jwt.core.TokenHasher;
 import org.sopt.jwt.core.TokenId;
 import org.sopt.jwt.support.AuthConstants;
+import org.sopt.user.type.RegisterStatus;
 import org.sopt.user.facade.UserFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +81,39 @@ public class TokenService {
                 .accessToken(newAT)
                 .refreshToken(newRT)
                 .build();
+    }
+
+    @Transactional
+    public SocialLoginRes issueToken(SocialLoginReq req, final long userId, final RegisterStatus registerStatus) {
+        final String sessionId = jwtTokenProvider.newSessionId();
+        final String accessToken = jwtTokenProvider.generateAccessToken(
+                userId,
+                req.role(),
+                req.provider(),
+                sessionId
+        );
+        final String refreshToken = jwtTokenProvider.generateRefreshToken(
+                userId,
+                req.provider(),
+                sessionId
+        );
+
+        Token token = Token.builder()
+                .id(userId + ":" + sessionId)
+                .userId(userId)
+                .authProvider(req.provider())
+                .refreshTokenHash(tokenHasher.hash(refreshToken))
+                .deviceName(req.deviceName())
+                .deviceType(req.deviceType())
+                .osType(req.osType())
+                .osVersion(req.osVersion())
+                .appVersion(req.appVersion())
+                .issuedAt(Instant.now())
+                .lastUsedAt(Instant.now())
+                .build();
+        tokenRepository.save(token);
+
+        return SocialLoginRes.of(accessToken, refreshToken, registerStatus, userId);
     }
 
 }

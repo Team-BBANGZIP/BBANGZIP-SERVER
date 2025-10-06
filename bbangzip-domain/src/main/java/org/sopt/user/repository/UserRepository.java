@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("select u from UserEntity u where u.id = :id")
     Optional<UserEntity> findByIdForUpdate(@Param("id") Long id);
 
+    Optional<UserEntity> findByProviderAndProviderId(String provider, String providerId);
+
 }
