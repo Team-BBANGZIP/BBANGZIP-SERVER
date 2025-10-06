@@ -100,4 +100,8 @@ public class UserEntity extends BaseTimeEntity {
     public void revertDeleteUser() {
         this.isDeleted = false;
     }
+
+    public void updateRegisterStatus(RegisterStatus status) {
+        this.registerStatus = status;
+    }
 }
