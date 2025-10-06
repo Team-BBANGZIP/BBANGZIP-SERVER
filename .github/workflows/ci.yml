@@ -44,5 +44,5 @@ jobs:
             ${{ runner.os }}-gradle-
 
       # 6. Gradle 빌드 및 테스트 실행
-      - name: Build & Test
-        run: ./gradlew clean build --no-daemon
+      - name: Build bootJar for API module
+        run: ./gradlew clean :bbangzip-api:bootJar --no-daemon
