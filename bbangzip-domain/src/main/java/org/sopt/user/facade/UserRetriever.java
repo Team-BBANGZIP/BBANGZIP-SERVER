@@ -23,6 +23,11 @@ public class UserRetriever {
         return userEntity.toDomain();
     }
 
+    public UserEntity findUserEntityByUserId(final long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(UserCoreErrorCode.USER_NOT_FOUND));
+    }
+
     public Optional<UserEntity> findByProviderAndProviderId(final String provider, final String providerId){
         return userRepository.findByProviderAndProviderId(provider, providerId);
     };
