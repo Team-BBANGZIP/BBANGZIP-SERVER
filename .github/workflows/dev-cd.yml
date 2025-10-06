@@ -31,7 +31,7 @@ jobs:
       # 4. Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_IMAGE_NAME_DEV }} .
+          docker build --no-cache -t ${{ secrets.DOCKER_IMAGE_NAME_DEV }} .
 
       # 5. Docker Hub 로그인
       - name: Log in to Docker Hub
