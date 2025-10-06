@@ -1,0 +1,17 @@
+package org.sopt.user.facade;
+
+import lombok.RequiredArgsConstructor;
+import org.sopt.user.domain.UserEntity;
+import org.sopt.user.repository.UserRepository;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class UserSaver {
+
+    private final UserRepository userRepository;
+
+    public UserEntity save(final UserEntity user){
+        return userRepository.save(user);
+    }
+}
