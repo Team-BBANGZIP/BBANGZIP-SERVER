@@ -14,8 +14,11 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# 빌드 결과물 복사
+# 빌드 결과물 JAR 복사
 COPY --from=build /app/bbangzip-api/build/libs/bbangzip.jar app.jar
+
+# dev 설정 복사 (멀티모듈 대응)
+COPY --from=build /app/bbangzip-api/src/main/resources/application-dev.yml /app/application-dev.yml
 
 EXPOSE 8080
 

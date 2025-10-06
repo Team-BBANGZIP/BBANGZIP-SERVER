@@ -28,10 +28,15 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      # 4. Docker 이미지 빌드
+      # 4. Docker 이미지 빌드 (캐시 비활성화 + YML 확인)
       - name: Build Docker image
         run: |
+          echo "[INFO] Removing Docker cache..."
+          docker builder prune -af || true
+          echo "[INFO] Building Docker image without cache..."
           docker build --no-cache -t ${{ secrets.DOCKER_IMAGE_NAME_DEV }} .
+          echo "[INFO] Verifying application-dev.yml inside image..."
+          docker run --rm ${{ secrets.DOCKER_IMAGE_NAME_DEV }} sh -c "ls /app | grep application-dev.yml || echo '❌ application-dev.yml not found!'"
 
       # 5. Docker Hub 로그인
       - name: Log in to Docker Hub
@@ -49,10 +54,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 7. EC2에 docker-compose-dev.yml 업로드
+      # 7. 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 8. EC2에 docker-compose-dev.yml 업로드
       - name: Upload docker-compose to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -62,7 +68,7 @@ jobs:
           source: ./docker-compose-dev.yml
           target: /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
-      # 8. EC2 접속 후 배포 실행
+      # 9. EC2 접속 후 배포 실행
       - name: SSH & Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
@@ -77,16 +83,14 @@ jobs:
             CONTAINER_ID=$(docker ps -q --filter "name=$CONTAINER_NAME")
       
             if [ -n "$CONTAINER_ID" ]; then
-            echo "[INFO] Stopping and removing container: $CONTAINER_NAME ($CONTAINER_ID)"
-            docker stop $CONTAINER_ID
-            docker rm $CONTAINER_ID
-            else
-            echo "[INFO] No running container named: $CONTAINER_NAME"
+              echo "[INFO] Stopping existing container..."
+              docker stop $CONTAINER_ID
+              docker rm $CONTAINER_ID
             fi
 
-            # .env 파일 생성
+            echo "[INFO] Writing .env file..."
             echo "${{ secrets.ENV_DEV_FILE }}" > .env
             echo "DOCKER_IMAGE_NAME_DEV=${{ secrets.DOCKER_IMAGE_NAME_DEV }}" >> .env
 
-            # 컨테이너 재시작
+            echo "[INFO] Starting new container..."
             docker compose -f docker-compose-dev.yml up -d
