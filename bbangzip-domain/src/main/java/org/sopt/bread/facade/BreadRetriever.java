@@ -6,6 +6,7 @@ import org.sopt.bread.repository.BreadRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -17,4 +18,7 @@ public class BreadRetriever {
         return breadRepository.findAll();
     }
 
+    public Optional<BreadEntity> findByName(String name) {
+        return breadRepository.findByName(name);
+    }
 }

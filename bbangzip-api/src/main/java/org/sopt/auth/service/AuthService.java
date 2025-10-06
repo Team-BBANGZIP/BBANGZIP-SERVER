@@ -3,7 +3,7 @@ package org.sopt.auth.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.sopt.auth.dto.SignUpReq;
 import org.sopt.auth.dto.SocialLoginReq;
 import org.sopt.auth.dto.SocialLoginRes;
 import org.sopt.auth.exception.AppleServerErrorException;
@@ -20,9 +20,11 @@ import org.sopt.jwt.auth.authentication.UserRole;
 import org.sopt.jwt.auth.domain.type.AuthProvider;
 import org.sopt.token.TokenService;
 import org.sopt.jwt.auth.dto.ReissueTokensRes;
+import org.sopt.user.domain.User;
 import org.sopt.user.domain.UserEntity;
 import org.sopt.user.type.RegisterStatus;
 import org.sopt.user.facade.UserFacade;
+import org.sopt.userbread.facade.UserBreadFacade;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,7 @@ public class AuthService {
     private final TokenService tokenService;
     private final UserFacade userFacade;
     private final KakaoInfoClient kakaoInfoClient;
+    private final UserBreadFacade userBreadFacade;
 
     /**
      * 소셜 로그인
@@ -160,6 +163,17 @@ public class AuthService {
         return kakaoInfoClient.kakaoInfo(
                 KakaoConstant.BEARER + accessToken
         );
+    }
+
+    /**
+     * 회원가입 API
+     */
+    @Transactional
+    public void signUp(final long userId, final SignUpReq req) {
+       userFacade.updateProfile(userId, req.profileImageKey(), req.nickname(), null);
+       userFacade.updateRegisterStatus(userId, RegisterStatus.PROFILE_COMPLETED);
+       userBreadFacade.unlockSaltBreadOnSignUp(userId);
+       return;
     }
 
     @Transactional

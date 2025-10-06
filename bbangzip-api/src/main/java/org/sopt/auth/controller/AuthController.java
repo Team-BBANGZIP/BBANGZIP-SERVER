@@ -3,9 +3,11 @@ package org.sopt.auth.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.sopt.auth.dto.SignUpReq;
 import org.sopt.auth.dto.SocialLoginReq;
 import org.sopt.auth.dto.SocialLoginRes;
 import org.sopt.auth.service.AuthService;
+import org.sopt.jwt.annotation.UserId;
 import org.sopt.jwt.auth.dto.ReissueTokensRes;
 import org.sopt.jwt.core.JwtTokenProvider;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,15 @@ public class AuthController {
     ) {
         SocialLoginRes res = authService.socialLogin(providerToken, req);
         return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<Void> signUp(
+            @UserId Long userId,
+            @Valid @RequestBody SignUpReq req
+    ) {
+        authService.signUp(userId, req);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/re-issue")

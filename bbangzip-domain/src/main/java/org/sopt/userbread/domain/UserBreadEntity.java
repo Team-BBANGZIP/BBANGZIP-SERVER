@@ -12,7 +12,10 @@ import static org.sopt.userbread.domain.UserBreadTableConstants.*;
 
 @Entity
 @Getter
-@Table(name = TABLE_USER_BREAD)
+@Table(
+        name = TABLE_USER_BREAD,
+        uniqueConstraints = @UniqueConstraint(columnNames = { COLUMN_USER_ID, COLUMN_BREAD_ID })
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserBreadEntity extends BaseTimeEntity {
 
@@ -31,5 +34,13 @@ public class UserBreadEntity extends BaseTimeEntity {
 
     @Column(name = COLUMN_IS_UNLOCKED, nullable = false)
     private Boolean isUnlocked;
+
+    public static UserBreadEntity create(UserEntity user, BreadEntity bread, boolean unlocked) {
+        UserBreadEntity e = new UserBreadEntity();
+        e.user = user;
+        e.bread = bread;
+        e.isUnlocked = unlocked;
+        return e;
+    }
 
 }

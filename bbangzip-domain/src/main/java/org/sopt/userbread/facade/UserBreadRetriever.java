@@ -17,4 +17,7 @@ public class UserBreadRetriever {
         return userBreadRepository.findAllByUserId(userId);
     }
 
+    public boolean existsByUserIdAndBreadId(Long userId, Long breadId) {
+        return userBreadRepository.existsByUserIdAndBreadId(userId, breadId);
+    }
 }

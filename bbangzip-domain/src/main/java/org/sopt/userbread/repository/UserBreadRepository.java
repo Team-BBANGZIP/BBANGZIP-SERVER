@@ -16,4 +16,6 @@ public interface UserBreadRepository extends JpaRepository<UserBreadEntity, Long
         where ub.user.id = :userId
     """)
     List<UserBreadEntity> findAllByUserId(@Param("userId") Long userId);
+
+    boolean existsByUserIdAndBreadId(Long userId, Long breadId);
 }

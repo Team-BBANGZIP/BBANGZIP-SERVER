@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -20,6 +21,11 @@ public class BreadFacade {
                 .stream()
                 .sorted(Comparator.comparing(BreadEntity::getId))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<BreadEntity> findByName(String name) {
+        return breadRetriever.findByName(name);
     }
 
 }
