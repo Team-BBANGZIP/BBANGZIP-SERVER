@@ -16,6 +16,7 @@ WORKDIR /app
 
 # 빌드 결과물 복사
 COPY --from=build /app/bbangzip-api/build/libs/*.jar app.jar
+COPY --from=build /app/bbangzip-api/build/resources/main/application-dev.yml /app/application-dev.yml
 
 EXPOSE 8080
 
