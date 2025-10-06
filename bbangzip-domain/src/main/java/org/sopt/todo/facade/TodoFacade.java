@@ -86,14 +86,14 @@ public class TodoFacade {
     }
 
     @Transactional
-    public TodoEntity reschedule(Long userId, Long todoId, LocalDate targetDate) {
+    public TodoEntity repeatTodo(Long userId, Long todoId, LocalDate targetDate) {
         TodoEntity origin = todoRetriever.findByIdAndUserId(todoId, userId)
                 .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
 
         // 새 날짜의 order 계산
         int newOrder = todoRetriever.countTotalByUserIdAndDate(userId, targetDate);
 
-        return todoUpdater.reschedule(origin, targetDate, newOrder);
+        return todoUpdater.repeat(origin, targetDate, newOrder);
     }
 
     @Transactional
@@ -114,4 +114,29 @@ public class TodoFacade {
         return copiedTodo;
     }
 
+    @Transactional
+    public TodoEntity rescheduleTodo(Long userId, Long todoId, LocalDate requestDate) {
+        TodoEntity origin = todoRetriever.findByIdAndUserId(todoId, userId)
+                .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+
+        // 요청이 null이면 기존 날짜 +1일
+        LocalDate newDate = (requestDate == null)
+                ? origin.getTargetDate().plusDays(1)
+                : requestDate;
+
+        // 새 날짜의 정렬 순서 계산
+        int newOrder = todoRetriever.countTotalByUserIdAndDate(userId, newDate);
+
+        // 기존 투두 삭제 후 동일 내용으로 새로 저장
+        todoRemover.remove(userId, todoId);
+
+        return todoSaver.save(
+                origin.getCategory().getId(),
+                origin.getContent(),
+                newDate,
+                origin.getStartTime(),
+                false,
+                newOrder
+        );
+    }
 }

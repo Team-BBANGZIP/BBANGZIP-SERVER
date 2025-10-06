@@ -7,6 +7,7 @@ import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
 import org.sopt.todo.dto.req.TodoCreateReq;
+import org.sopt.todo.dto.req.TodoRescheduleReq;
 import org.sopt.todo.dto.req.TodoUpdateContentReq;
 import org.sopt.todo.dto.req.TodoUpdateStartTimeReq;
 import org.sopt.todo.dto.res.*;
@@ -92,6 +93,7 @@ public class TodoService {
         );
     }
 
+    @Transactional
     public TodoUpdateContentRes updateTodoContent(Long userId, Long todoId, TodoUpdateContentReq todoUpdateContentReq) {
         TodoEntity updated = todoFacade.updateTodoContent(userId, todoId, todoUpdateContentReq.content());
         return new TodoUpdateContentRes(updated.getId(), updated.getContent());
@@ -124,8 +126,8 @@ public class TodoService {
     }
 
     @Transactional
-    public TodoCreateRes rescheduleTodo(Long userId, Long todoId, LocalDate targetDate) {
-        TodoEntity newEntity = todoFacade.reschedule(userId, todoId, targetDate);
+    public TodoCreateRes repeatTodo(Long userId, Long todoId, LocalDate targetDate) {
+        TodoEntity newEntity = todoFacade.repeatTodo(userId, todoId, targetDate);
         return TodoCreateRes.from(newEntity.toDomain());
     }
 
@@ -133,5 +135,11 @@ public class TodoService {
     public TodoCreateRes copyTodo(Long userId, Long todoId) {
         TodoEntity copiedTodo = todoFacade.copyTodo(userId, todoId);
         return TodoCreateRes.from(copiedTodo.toDomain());
+    }
+
+    @Transactional
+    public TodoCreateRes rescheduleTodo(Long userId, Long todoId, TodoRescheduleReq todoRescheduleReq) {
+        TodoEntity newEntity = todoFacade.rescheduleTodo(userId, todoId, todoRescheduleReq.targetDate());
+        return TodoCreateRes.from(newEntity.toDomain());
     }
 }
