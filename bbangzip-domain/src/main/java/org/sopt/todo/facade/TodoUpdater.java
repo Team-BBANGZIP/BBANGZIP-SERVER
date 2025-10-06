@@ -49,8 +49,8 @@ public class TodoUpdater {
                 .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
     }
 
-    public TodoEntity reschedule(TodoEntity original, LocalDate targetDate, int newOrder) {
-        TodoEntity newTodo = TodoEntity.forReschedule(original, targetDate, newOrder);
+    public TodoEntity repeat(TodoEntity original, LocalDate targetDate, int newOrder) {
+        TodoEntity newTodo = TodoEntity.forRepeat(original, targetDate, newOrder);
         return todoRepository.save(newTodo);
     }
 }

@@ -105,7 +105,7 @@ public class TodoEntity extends BaseTimeEntity {
      * - 완료 여부는 항상 false로 초기화
      * - 날짜만 새로운 targetDate로 교체
      */
-    public static TodoEntity forReschedule(TodoEntity original, LocalDate newDate, int order) {
+    public static TodoEntity forRepeat(TodoEntity original, LocalDate newDate, int order) {
         return forCreate(
                 original.getContent(),
                 original.getCategory(),
@@ -115,5 +115,4 @@ public class TodoEntity extends BaseTimeEntity {
                 order
         );
     }
-
 }
