@@ -32,22 +32,25 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagementConfigurer ->
-                        sessionManagementConfigurer
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception ->
-                {
-                    exception.authenticationEntryPoint(jwtAuthenticationEntryPoint);
-                });
+                        exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
-        http.authorizeHttpRequests(auth -> {
-                    auth
-                            .requestMatchers(AuthConstants.AUTH_WHITE_LIST).permitAll()
-                            .anyRequest()
-                            .authenticated();
-                })
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
+        // OAuth2 Login 활성화
+        http.oauth2Login(oauth2 -> oauth2
+                .loginPage("/oauth2/authorization/kakao") // 카카오 로그인 진입점
+                .defaultSuccessUrl("/api/v1/auth/signin/kakao/success", true) // 성공시 redirect
+                .failureUrl("/api/v1/auth/signin/kakao/fail") // 실패시 redirect
+        );
+
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(AuthConstants.AUTH_WHITE_LIST).permitAll()
+                .anyRequest().authenticated()
+        );
+
+        http.addFilterBefore(exceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
