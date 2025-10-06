@@ -3,7 +3,9 @@ package org.sopt.user.facade;
 import lombok.RequiredArgsConstructor;
 import org.sopt.user.domain.User;
 import org.sopt.user.domain.UserEntity;
+import org.sopt.user.type.RegisterStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,6 +20,9 @@ public class UserFacade {
     public User getUserById(final long userId) {
         return userRetriever.findByUserId(userId);
     }
+    public UserEntity getUserEntityById(final long userId) {
+        return userRetriever.findUserEntityByUserId(userId);
+    }
 
     public User saveCommitmentMessage(User user, String message) {
         return userUpdater.updateCommitmentMessage(user, message);
@@ -29,7 +34,6 @@ public class UserFacade {
                               final String commitmentMessage) {
         return userUpdater.updateProfile(userId, profileImageKey, nickname, commitmentMessage);
     }
-
 
     public UserEntity findByIdForUpdate(final long userId){
         return userUpdater.findByIdForUpdate(userId);
@@ -43,4 +47,8 @@ public class UserFacade {
         return userSaver.save(user);
     }
 
+    @Transactional
+    public void updateRegisterStatus(long userId, RegisterStatus status) {
+        userUpdater.updateRegisterStatus(userId, status);
+    }
 }
