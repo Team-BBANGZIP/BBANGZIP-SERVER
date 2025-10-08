@@ -1,10 +1,20 @@
 package org.sopt.todo.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.category.domain.CategoryColor;
+import org.sopt.category.domain.CategoryEntity;
+import org.sopt.category.exception.CategoryCoreErrorCode;
+import org.sopt.category.exception.CategoryNotFoundException;
+import org.sopt.category.facade.CategoryRetriever;
 import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
+import org.sopt.todo.domain.command.TodoOrderUpdateCommand;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
+import org.sopt.todo.exception.TodoCategoryColorMismatchException;
+import org.sopt.todo.exception.TodoCategoryMismatchException;
+import org.sopt.todo.exception.TodoCoreErrorCode;
 import org.sopt.todo.exception.TodoNotFoundException;
+import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +28,7 @@ import static org.sopt.todo.exception.TodoCoreErrorCode.TODO_NOT_FOUND;
 @RequiredArgsConstructor
 public class TodoFacade {
 
+    private final CategoryRetriever categoryRetriever;
     private final TodoRetriever todoRetriever;
     private final TodoSaver todoSaver;
     private final TodoRemover todoRemover;
@@ -138,5 +149,31 @@ public class TodoFacade {
                 false,
                 newOrder
         );
+    }
+
+    /**
+     * 여러 개 투두 순서 변경 및 카테고리 이동 처리
+     */
+    @Transactional
+    public void updateTodoOrder(Long userId, TodoOrderUpdateCommand todoOrderUpdateCommand) {
+        TodoEntity todo = todoRetriever.findByIdAndUserId(todoOrderUpdateCommand.todoId(), userId)
+                .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+
+        if (!todo.getCategory().getId().equals(todoOrderUpdateCommand.originCategoryId())) {
+            throw new TodoCategoryMismatchException(TodoCoreErrorCode.TODO_CATEGORY_MISMATCH);
+        }
+
+        CategoryEntity targetCategory = categoryRetriever.findById(todoOrderUpdateCommand.targetCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(CategoryCoreErrorCode.CATEGORY_NOT_FOUND));
+
+        if (!targetCategory.getColor().equals(CategoryColor.from(todoOrderUpdateCommand.targetCategoryColor()))) {
+            throw new TodoCategoryColorMismatchException(TodoCoreErrorCode.TODO_CATEGORY_COLOR_MISMATCH);
+        }
+
+        if (!todoOrderUpdateCommand.originCategoryId().equals(todoOrderUpdateCommand.targetCategoryId())) {
+            todoUpdater.moveCategory(todo, targetCategory);
+        }
+
+        todoUpdater.updateOrder(todoOrderUpdateCommand.todoList());
     }
 }
