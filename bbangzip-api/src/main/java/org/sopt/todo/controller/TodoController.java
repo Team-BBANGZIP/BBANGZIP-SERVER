@@ -110,4 +110,13 @@ public class TodoController {
                 .status(HttpStatus.CREATED)
                 .body(BaseResponse.success(SuccessCode.CREATED, todoService.rescheduleTodo(userId, todoId, todoRescheduleReq)));
     }
+
+    @PatchMapping("/order")
+    public ResponseEntity<Void> updateTodoOrder(
+            @UserId Long userId,
+            @Valid @RequestBody final TodoOrderUpdateReq todoOrderUpdateReq
+    ) {
+        todoService.updateTodoOrder(userId, todoOrderUpdateReq);
+        return ResponseEntity.ok().build();
+    }
 }
