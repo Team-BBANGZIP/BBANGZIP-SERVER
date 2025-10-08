@@ -5,11 +5,9 @@ import org.sopt.category.domain.Category;
 import org.sopt.category.facade.CategoryFacade;
 import org.sopt.todo.domain.Todo;
 import org.sopt.todo.domain.TodoEntity;
+import org.sopt.todo.domain.command.TodoOrderUpdateCommand;
 import org.sopt.todo.domain.dto.TodoDeleteResult;
-import org.sopt.todo.dto.req.TodoCreateReq;
-import org.sopt.todo.dto.req.TodoRescheduleReq;
-import org.sopt.todo.dto.req.TodoUpdateContentReq;
-import org.sopt.todo.dto.req.TodoUpdateStartTimeReq;
+import org.sopt.todo.dto.req.*;
 import org.sopt.todo.dto.res.*;
 import org.sopt.todo.facade.TodoFacade;
 import org.sopt.user.facade.UserFacade;
@@ -141,5 +139,17 @@ public class TodoService {
     public TodoCreateRes rescheduleTodo(Long userId, Long todoId, TodoRescheduleReq todoRescheduleReq) {
         TodoEntity newEntity = todoFacade.rescheduleTodo(userId, todoId, todoRescheduleReq.targetDate());
         return TodoCreateRes.from(newEntity.toDomain());
+    }
+
+    @Transactional
+    public void updateTodoOrder(Long userId, TodoOrderUpdateReq todoOrderUpdateReq) {
+        TodoOrderUpdateCommand todoOrderUpdateCommand = new TodoOrderUpdateCommand(
+                todoOrderUpdateReq.todoId(),
+                todoOrderUpdateReq.originCategoryId(),
+                todoOrderUpdateReq.targetCategoryId(),
+                todoOrderUpdateReq.targetCategoryColor(),
+                todoOrderUpdateReq.todoList()
+        );
+        todoFacade.updateTodoOrder(userId, todoOrderUpdateCommand);
     }
 }
