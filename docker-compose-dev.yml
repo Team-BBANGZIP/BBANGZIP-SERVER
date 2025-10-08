@@ -14,4 +14,4 @@ services:
 
 networks:
   bbangzip-network:
-    driver: bridge
+    external: true
