@@ -115,4 +115,8 @@ public class TodoEntity extends BaseTimeEntity {
                 order
         );
     }
+
+    public void updateCategory(CategoryEntity newCategory) {
+        this.category = newCategory;
+    }
 }
