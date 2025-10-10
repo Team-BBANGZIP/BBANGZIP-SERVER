@@ -181,4 +181,9 @@ public class AuthService {
         return tokenService.reissue(refreshToken);
     }
 
+    public Void logout(String accessToken) {
+        tokenService.logout(accessToken);
+        return null;
+    }
+
 }
