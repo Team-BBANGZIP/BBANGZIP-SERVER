@@ -14,13 +14,15 @@ import org.sopt.auth.util.kakao.KakaoConstant;
 import org.sopt.auth.util.kakao.KakaoInfoClient;
 import org.sopt.auth.util.kakao.KakaoUserInfoResponse;
 import org.sopt.auth.util.apple.MyKeyLocator;
+import org.sopt.category.facade.CategoryFacade;
+import org.sopt.dailybaking.facade.DailyBakingFacade;
 import org.sopt.exception.AuthErrorCode;
 import org.sopt.exception.UnAuthorizedException;
 import org.sopt.jwt.auth.authentication.UserRole;
 import org.sopt.jwt.auth.domain.type.AuthProvider;
+import org.sopt.todo.facade.TodoFacade;
 import org.sopt.token.TokenService;
 import org.sopt.jwt.auth.dto.ReissueTokensRes;
-import org.sopt.user.domain.User;
 import org.sopt.user.domain.UserEntity;
 import org.sopt.user.type.RegisterStatus;
 import org.sopt.user.facade.UserFacade;
@@ -40,8 +42,12 @@ import static org.sopt.jwt.auth.domain.type.AuthProvider.KAKAO;
 public class AuthService {
 
     private final TokenService tokenService;
-    private final UserFacade userFacade;
     private final KakaoInfoClient kakaoInfoClient;
+
+    private final CategoryFacade categoryFacade;
+    private final DailyBakingFacade dailyBakingFacade;
+    private final TodoFacade todoFacade;
+    private final UserFacade userFacade;
     private final UserBreadFacade userBreadFacade;
 
     /**
@@ -186,4 +192,20 @@ public class AuthService {
         return null;
     }
 
+
+    @Transactional
+    public Void leave(Long userId, String accessToken) {
+
+        tokenService.leave(accessToken);
+
+        todoFacade.deleteAllByUserId(userId);
+        categoryFacade.deleteAllByUserId(userId);
+
+        dailyBakingFacade.deleteAllByUserId(userId);
+        userBreadFacade.deleteAllByUserId(userId);
+
+        userFacade.deleteByUserId(userId);
+
+        return null;
+    }
 }
