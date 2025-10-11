@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -135,6 +136,17 @@ public class TokenService {
             throw new InvalidTokenException(AuthErrorCode.TYPE_ERROR_JWT_TOKEN);
         }
         return claims;
+    }
+
+    @Transactional
+    public void leave(final String accessToken) {
+        Claims claims = getClaimsFromAccessToken(accessToken);
+
+        Long userId = claims.get(AuthConstants.USER_ID_CLAIM_NAME, Long.class);
+        List<Token> tokens = tokenRepository.findByUserId(userId);
+
+        List<String> tokenIds = tokens.stream().map(Token::getId).toList();
+        tokenRepository.deleteAllById(tokenIds);
     }
 
 }
