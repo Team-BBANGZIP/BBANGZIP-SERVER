@@ -47,12 +47,21 @@ public class AuthController {
         return ResponseEntity.ok(authService.reissue(refreshToken));
     }
 
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     public ResponseEntity<Void> logout(
             HttpServletRequest request
     ) {
         String accessToken = jwtTokenProvider.getJwtFromRequest(request);
         return ResponseEntity.ok(authService.logout(accessToken));
+    }
+
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<Void> leave(
+            @UserId Long userId,
+            HttpServletRequest request
+    ) {
+        String accessToken = jwtTokenProvider.getJwtFromRequest(request);
+        return ResponseEntity.ok(authService.leave(userId, accessToken));
     }
 
 }
