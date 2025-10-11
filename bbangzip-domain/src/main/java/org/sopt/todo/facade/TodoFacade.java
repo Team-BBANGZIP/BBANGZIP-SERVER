@@ -14,7 +14,6 @@ import org.sopt.todo.exception.TodoCategoryColorMismatchException;
 import org.sopt.todo.exception.TodoCategoryMismatchException;
 import org.sopt.todo.exception.TodoCoreErrorCode;
 import org.sopt.todo.exception.TodoNotFoundException;
-import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,13 +112,17 @@ public class TodoFacade {
         TodoEntity originalTodo = todoRetriever.findByIdAndUserId(todoId, userId)
                 .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
 
-        int order = todoRetriever.countTotalByUserIdAndDate(userId, originalTodo.getTargetDate());
+        int originalOrder = originalTodo.getOrder();
 
+        // 원본 뒤 투두들의 순서를 +1씩 증가
+        todoUpdater.incrementOrderAfter(userId, originalTodo.getTargetDate(), originalOrder);
+
+        // 복제된 투두를 원본 바로 뒤에 저장
         TodoEntity copiedTodo = todoSaver.saveCopiedTodo(
                 originalTodo.getCategory().getId(),
                 originalTodo.getContent(),
                 originalTodo.getTargetDate(),
-                order
+                originalOrder + 1
         );
 
         return copiedTodo;
