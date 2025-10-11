@@ -33,7 +33,8 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
         WHERE t.category.id IN :categoryIds
           AND t.targetDate = :date
           AND t.category.isStopped = false
-    """)
+        ORDER BY t.category.id, t.order ASC
+""")
     List<TodoEntity> findByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date);
 
     // 특정 날짜의 전체 투두 개수
@@ -58,4 +59,15 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     @Transactional
     @Query("UPDATE TodoEntity t SET t.order = :order WHERE t.id = :todoId")
     void updateOrderByTodoId(@Param("todoId") Long todoId, @Param("order") int order);
+
+    @Modifying
+    @Query(value = """
+    UPDATE todo t
+    JOIN category c ON c.id = t.category_id
+    SET t.order_index = t.order_index + 1
+    WHERE c.user_id = :userId
+      AND t.target_date = :targetDate
+      AND t.order_index > :order
+    """, nativeQuery = true)
+    void incrementOrderAfter(Long userId, LocalDate targetDate, int order);
 }
