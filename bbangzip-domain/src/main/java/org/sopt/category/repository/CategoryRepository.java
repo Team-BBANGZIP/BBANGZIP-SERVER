@@ -1,7 +1,6 @@
 package org.sopt.category.repository;
 
 import org.sopt.category.domain.CategoryEntity;
-import org.sopt.todo.domain.TodoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +24,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
     @Query("SELECT c FROM CategoryEntity c WHERE c.user.id = :userId AND c.isStopped = false")
     List<CategoryEntity> findActiveByUserId(Long userId);
+
+    void deleteAllByUserId(Long userId);
 }

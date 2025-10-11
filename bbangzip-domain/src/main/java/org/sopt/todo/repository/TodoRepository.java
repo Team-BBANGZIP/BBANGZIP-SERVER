@@ -58,4 +58,7 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     @Transactional
     @Query("UPDATE TodoEntity t SET t.order = :order WHERE t.id = :todoId")
     void updateOrderByTodoId(@Param("todoId") Long todoId, @Param("order") int order);
+
+    void deleteAllByCategory_User_Id(Long userId);
+
 }

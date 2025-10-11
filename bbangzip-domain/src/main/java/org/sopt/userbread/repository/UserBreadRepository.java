@@ -18,4 +18,6 @@ public interface UserBreadRepository extends JpaRepository<UserBreadEntity, Long
     List<UserBreadEntity> findAllByUserId(@Param("userId") Long userId);
 
     boolean existsByUserIdAndBreadId(Long userId, Long breadId);
+
+    void deleteAllByUserId(Long userId);
 }
