@@ -2,7 +2,6 @@ package org.sopt.todo.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.CategoryEntity;
-import org.sopt.category.repository.CategoryRepository;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.exception.*;
 import org.sopt.todo.repository.TodoRepository;
@@ -49,6 +48,11 @@ public class TodoUpdater {
     private TodoEntity getTodoOrThrow(Long userId, Long todoId) {
         return todoRepository.findByIdAndUserId(todoId, userId)
                 .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
+    }
+
+    @Transactional
+    public void incrementOrderAfter(Long userId, LocalDate targetDate, int order) {
+        todoRepository.incrementOrderAfter(userId, targetDate, order);
     }
 
     public TodoEntity repeat(TodoEntity original, LocalDate targetDate, int newOrder) {
