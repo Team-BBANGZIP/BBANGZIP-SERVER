@@ -59,4 +59,8 @@ public class CategoryFacade {
                 .toList();
     }
 
+    public void deleteAllByUserId(final Long userId) {
+        categoryRemover.deleteAllByUserId(userId);
+    }
+
 }

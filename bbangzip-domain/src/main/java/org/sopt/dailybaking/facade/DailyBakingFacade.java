@@ -13,6 +13,7 @@ public class DailyBakingFacade {
 
     private final DailyBakingRetriever dailyBakingRetriever;
     private final DailyBakingSaver dailyBakingSaver;
+    private final DailyBakingRemover dailyBakingRemover;
 
     public Optional<DailyBakingEntity> findByUserIdAndBakeDateInDay(
             long userId, LocalDateTime startOfDay, LocalDateTime endOfDay
@@ -22,5 +23,9 @@ public class DailyBakingFacade {
 
     public DailyBakingEntity save(DailyBakingEntity entity) {
         return dailyBakingSaver.save(entity);
+    }
+
+    public void deleteAllByUserId(final Long userId) {
+        dailyBakingRemover.deleteAllByUserId(userId);
     }
 }
