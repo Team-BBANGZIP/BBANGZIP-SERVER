@@ -176,4 +176,9 @@ public class TodoFacade {
 
         todoUpdater.updateOrder(todoOrderUpdateCommand.todoList());
     }
+
+    public void deleteAllByUserId(final Long userId) {
+        todoRemover.deleteAllByUserId(userId);
+    }
+
 }

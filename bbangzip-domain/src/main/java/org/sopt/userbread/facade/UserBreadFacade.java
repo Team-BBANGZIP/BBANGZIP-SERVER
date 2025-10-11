@@ -18,9 +18,10 @@ import java.util.List;
 public class UserBreadFacade {
 
     private final UserBreadRetriever userBreadRetriever;
-    private final UserBreadSaver userBreadSaver;   // ✅ 저장 담당
+    private final UserBreadRemover userBreadRemover;
+    private final UserBreadSaver userBreadSaver;
     private final BreadFacade breadFacade;
-    private final UserFacade userFacade;           // ✅ user 엔티티 조회
+    private final UserFacade userFacade;
 
     @Transactional
     public void unlockSaltBreadOnSignUp(final long userId) {
@@ -40,5 +41,9 @@ public class UserBreadFacade {
     @Transactional(readOnly = true)
     public List<UserBreadEntity> findAllByUserId(Long userId) {
         return userBreadRetriever.findAllByUserId(userId);
+    }
+
+    public void deleteAllByUserId(final Long userId) {
+        userBreadRemover.deleteAllByUserId(userId);
     }
 }
