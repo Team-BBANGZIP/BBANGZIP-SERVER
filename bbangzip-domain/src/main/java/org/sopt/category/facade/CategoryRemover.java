@@ -17,4 +17,9 @@ public class CategoryRemover {
     public void delete(final Category category) {
         categoryRepository.deleteById(category.getId());
     }
+
+    public void deleteAllByUserId(Long userId) {
+        categoryRepository.deleteAllByUserId(userId);
+    };
+
 }

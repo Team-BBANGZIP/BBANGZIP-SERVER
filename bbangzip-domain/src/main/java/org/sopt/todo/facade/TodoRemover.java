@@ -11,6 +11,7 @@ import static org.sopt.todo.exception.TodoCoreErrorCode.TODO_NOT_FOUND;
 @Component
 @RequiredArgsConstructor
 public class TodoRemover {
+
     private final TodoRepository todoRepository;
 
     @Transactional
@@ -20,4 +21,9 @@ public class TodoRemover {
             throw new TodoNotFoundException(TODO_NOT_FOUND);
         }
     }
+
+    public void deleteAllByUserId(Long userId) {
+       todoRepository.deleteAllByCategory_User_Id(userId);
+    };
+
 }
