@@ -183,5 +183,4 @@ public class TodoFacade {
     public void deleteAllByUserId(final Long userId) {
         todoRemover.deleteAllByUserId(userId);
     }
-
 }
