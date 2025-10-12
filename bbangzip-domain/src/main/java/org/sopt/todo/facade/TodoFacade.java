@@ -180,3 +180,4 @@ public class TodoFacade {
 
         todoUpdater.updateOrder(todoOrderUpdateCommand.todoList());
     }
+}

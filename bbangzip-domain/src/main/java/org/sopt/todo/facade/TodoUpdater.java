@@ -74,3 +74,4 @@ public class TodoUpdater {
             todoRepository.updateOrderByTodoId(todoId, order++);
         }
     }
+}
