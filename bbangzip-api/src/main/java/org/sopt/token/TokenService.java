@@ -116,4 +116,25 @@ public class TokenService {
         return SocialLoginRes.of(accessToken, refreshToken, registerStatus, userId);
     }
 
+    @Transactional
+    public void logout(final String accessToken) {
+        Claims claims = getClaimsFromAccessToken(accessToken);
+
+        Long userId = claims.get(AuthConstants.USER_ID_CLAIM_NAME, Long.class);
+        String sessionId = claims.get(JwtClaimsKeys.SESSIONID, String.class);
+
+        String tokenId = new TokenId(userId, sessionId).toString();
+        tokenRepository.deleteById(tokenId);
+    }
+
+    private Claims getClaimsFromAccessToken(final String accessToken) {
+        Claims claims = jwtTokenProvider.parseAndVerify(accessToken);
+        final String type = claims.get(JwtClaimsKeys.TYPE, String.class);
+
+        if (!JwtClaimsKeys.ACCESS.equals(type)) {
+            throw new InvalidTokenException(AuthErrorCode.TYPE_ERROR_JWT_TOKEN);
+        }
+        return claims;
+    }
+
 }

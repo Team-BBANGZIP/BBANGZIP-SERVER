@@ -2,6 +2,7 @@ package org.sopt.todo.facade;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.category.domain.CategoryEntity;
+import org.sopt.category.repository.CategoryRepository;
 import org.sopt.todo.domain.TodoEntity;
 import org.sopt.todo.exception.*;
 import org.sopt.todo.repository.TodoRepository;
@@ -73,4 +74,3 @@ public class TodoUpdater {
             todoRepository.updateOrderByTodoId(todoId, order++);
         }
     }
-}
