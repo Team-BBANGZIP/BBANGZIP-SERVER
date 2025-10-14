@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +21,12 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     @Query("SELECT c FROM CategoryEntity c WHERE c.id IN :ids AND c.user.id = :userId")
     List<CategoryEntity> findAllByIdAndUserId(@Param("ids") List<Long> ids, @Param("userId") Long userId);
 
-    @Query("SELECT c FROM CategoryEntity c WHERE c.user.id = :userId AND c.isStopped = false")
+    @Query("""
+    SELECT c FROM CategoryEntity c
+    WHERE c.user.id = :userId
+      AND c.isStopped = false
+    ORDER BY c.order ASC
+""")
     List<CategoryEntity> findActiveByUserId(Long userId);
 
     void deleteAllByUserId(Long userId);

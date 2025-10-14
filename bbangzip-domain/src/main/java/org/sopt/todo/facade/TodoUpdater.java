@@ -51,6 +51,11 @@ public class TodoUpdater {
                 .orElseThrow(() -> new TodoNotFoundException(TODO_NOT_FOUND));
     }
 
+    @Transactional
+    public void incrementOrderAfter(Long userId, LocalDate targetDate, int order) {
+        todoRepository.incrementOrderAfter(userId, targetDate, order);
+    }
+
     public TodoEntity repeat(TodoEntity original, LocalDate targetDate, int newOrder) {
         TodoEntity newTodo = TodoEntity.forRepeat(original, targetDate, newOrder);
         return todoRepository.save(newTodo);
