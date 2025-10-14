@@ -16,6 +16,7 @@ public class UserFacade {
     private final UserRetriever userRetriever;
     private final UserUpdater userUpdater;
     private final UserSaver userSaver;
+    private final UserRemover userRemover;
 
     public User getUserById(final long userId) {
         return userRetriever.findByUserId(userId);
@@ -50,5 +51,9 @@ public class UserFacade {
     @Transactional
     public void updateRegisterStatus(long userId, RegisterStatus status) {
         userUpdater.updateRegisterStatus(userId, status);
+    }
+
+    public void deleteByUserId(long userId){
+        userRemover.deleteUserById(userId);
     }
 }

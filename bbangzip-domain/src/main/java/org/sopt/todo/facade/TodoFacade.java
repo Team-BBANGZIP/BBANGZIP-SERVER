@@ -14,7 +14,6 @@ import org.sopt.todo.exception.TodoCategoryColorMismatchException;
 import org.sopt.todo.exception.TodoCategoryMismatchException;
 import org.sopt.todo.exception.TodoCoreErrorCode;
 import org.sopt.todo.exception.TodoNotFoundException;
-import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -180,4 +179,9 @@ public class TodoFacade {
 
         todoUpdater.updateOrder(todoOrderUpdateCommand.todoList());
     }
+
+    public void deleteAllByUserId(final Long userId) {
+        todoRemover.deleteAllByUserId(userId);
+    }
+
 }
