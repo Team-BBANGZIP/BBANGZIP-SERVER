@@ -70,4 +70,7 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
       AND t.order_index > :order
     """, nativeQuery = true)
     void incrementOrderAfter(Long userId, LocalDate targetDate, int order);
+
+    void deleteAllByCategory_User_Id(Long userId);
+
 }

@@ -23,4 +23,6 @@ public interface DailyBakingRepository extends JpaRepository<DailyBakingEntity, 
             @Param("endOfDay") LocalDateTime endOfDay
     );
 
+    void deleteAllByUserId(Long userId);
+
 }

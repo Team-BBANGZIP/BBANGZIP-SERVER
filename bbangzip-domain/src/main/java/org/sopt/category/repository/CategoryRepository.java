@@ -28,4 +28,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
     ORDER BY c.order ASC
 """)
     List<CategoryEntity> findActiveByUserId(Long userId);
+
+    void deleteAllByUserId(Long userId);
 }
