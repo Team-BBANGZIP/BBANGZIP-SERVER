@@ -74,7 +74,6 @@ public class TodoService {
                             todoDtos
                     );
                 })
-                .filter(categoryDto -> !categoryDto.todos().isEmpty())
                 .toList();
 
         int totalCount = todos.size();
