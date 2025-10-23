@@ -61,7 +61,7 @@ public class CategoryController {
             @PathVariable final Long categoryId
     ) {
         categoryService.deleteCategory(userId, categoryId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/order")
