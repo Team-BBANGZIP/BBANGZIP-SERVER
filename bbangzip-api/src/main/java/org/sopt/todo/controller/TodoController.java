@@ -47,7 +47,7 @@ public class TodoController {
             @Valid @RequestBody final TodoUpdateContentReq todoUpdateContentReq
     ) {
         todoService.updateTodoContent(userId, todoId, todoUpdateContentReq);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{todoId}/completion")
@@ -100,7 +100,7 @@ public class TodoController {
                 .body(BaseResponse.success(SuccessCode.CREATED, todoService.copyTodo(userId, todoId)));
     }
 
-    @PostMapping("/{todoId}/reschedule")
+    @PatchMapping("/{todoId}/reschedule")
     public ResponseEntity<BaseResponse<TodoCreateRes>> rescheduleTodo(
             @UserId Long userId,
             @PathVariable Long todoId,
