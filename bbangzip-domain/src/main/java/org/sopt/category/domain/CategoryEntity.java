@@ -1,23 +1,16 @@
 package org.sopt.category.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.common.BaseTimeEntity;
+import org.sopt.todo.domain.TodoEntity;
 import org.sopt.user.domain.UserEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_COLOR;
 import static org.sopt.category.domain.CategoryTableConstants.COLUMN_ID;
@@ -55,6 +48,13 @@ public class CategoryEntity extends BaseTimeEntity {
 
     @Column(name = STOPPED_DATE)
     private LocalDateTime stoppedDate;
+
+    @OneToMany(
+            mappedBy = "category",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
+    private List<TodoEntity> todos = new ArrayList<>();
 
     @Column(name = COLUMN_ORDER, nullable = false)
     private int order;
