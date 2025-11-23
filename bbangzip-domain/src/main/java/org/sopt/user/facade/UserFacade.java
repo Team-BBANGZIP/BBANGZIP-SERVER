@@ -36,6 +36,10 @@ public class UserFacade {
         return userUpdater.updateProfile(userId, profileImageKey, nickname, commitmentMessage);
     }
 
+    public User getProfile(final long userId) {
+        return userRetriever.findByUserId(userId);
+    }
+
     public UserEntity findByIdForUpdate(final long userId){
         return userUpdater.findByIdForUpdate(userId);
     }

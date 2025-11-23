@@ -36,4 +36,8 @@ public class UserService {
         );
     }
 
+    public User getProfile(final Long userId) {
+        return userFacade.getProfile(userId);
+    }
+
 }
