@@ -7,6 +7,7 @@ import org.sopt.user.domain.User;
 import org.sopt.user.dto.req.CommitmentMessageCreateReq;
 import org.sopt.user.dto.req.UserProfileUpdateReq;
 import org.sopt.user.dto.res.CommitmentMessageRes;
+import org.sopt.user.dto.res.UserProfileRes;
 import org.sopt.user.dto.res.UserProfileUpdateRes;
 import org.sopt.user.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,15 @@ public class UserController {
         User updatedProfile = userService.updateProfile(userId, userProfileUpdateReq);
         return ResponseEntity
                 .ok(UserProfileUpdateRes.from(updatedProfile));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserProfileRes> getProfile(
+            @UserId Long userId
+    ) {
+        User userProfile = userService.getProfile(userId);
+        return ResponseEntity
+                .ok(UserProfileRes.from(userProfile));
     }
 
 }
