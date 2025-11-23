@@ -10,7 +10,7 @@ COPY . .
 RUN ./gradlew clean :bbangzip-api:bootJar --no-daemon
 
 # 2단계: 이미지 실행
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
