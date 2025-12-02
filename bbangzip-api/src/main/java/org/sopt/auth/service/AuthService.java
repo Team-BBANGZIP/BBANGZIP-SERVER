@@ -24,6 +24,7 @@ import org.sopt.todo.facade.TodoFacade;
 import org.sopt.token.TokenService;
 import org.sopt.jwt.auth.dto.ReissueTokensRes;
 import org.sopt.user.domain.UserEntity;
+import org.sopt.user.service.UserOnboardingService;
 import org.sopt.user.type.RegisterStatus;
 import org.sopt.user.facade.UserFacade;
 import org.sopt.userbread.facade.UserBreadFacade;
@@ -49,6 +50,7 @@ public class AuthService {
     private final TodoFacade todoFacade;
     private final UserFacade userFacade;
     private final UserBreadFacade userBreadFacade;
+    private final UserOnboardingService userOnboardingService;
 
     /**
      * 소셜 로그인
@@ -178,7 +180,10 @@ public class AuthService {
     public void signUp(final long userId, final SignUpReq req) {
        userFacade.updateProfile(userId, req.profileImageKey(), req.nickname(), null);
        userFacade.updateRegisterStatus(userId, RegisterStatus.PROFILE_COMPLETED);
+
        userBreadFacade.unlockSaltBreadOnSignUp(userId);
+       userOnboardingService.createDefaultsFor(userId);
+
        return;
     }
 
