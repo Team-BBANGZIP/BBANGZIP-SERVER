@@ -1,14 +1,23 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:alpine
+    container_name: bbangzip-redis
+    restart: always
+    networks:
+      - bbangzip-network
+
   app:
-    image: ${DOCKER_IMAGE_NAME_DEV}  # 시크릿에서 넘겨받은 환경변수 사용
+    image: ${DOCKER_IMAGE_NAME_DEV}
     container_name: bbangzip-app
     restart: always
     ports:
       - "8080:8080"
     env_file:
       - .env
+    depends_on:
+      - redis
     networks:
       - bbangzip-network
 
