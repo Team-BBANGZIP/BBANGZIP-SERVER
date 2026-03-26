@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - develop
-  pull_request:
-    branches:
-      - develop
   workflow_dispatch:
 
 jobs:
@@ -93,5 +90,8 @@ jobs:
             echo "${{ secrets.ENV_DEV_FILE }}" > .env
             echo "DOCKER_IMAGE_NAME_DEV=${{ secrets.DOCKER_IMAGE_NAME_DEV }}" >> .env
 
-            echo "[INFO] Starting new container..."
-            docker compose -f docker-compose-dev.yml up -d
+            echo "[INFO] Pulling latest app image..."
+            docker compose -f docker-compose-dev.yml pull app
+
+            echo "[INFO] Starting new container (force recreate)..."
+            docker compose -f docker-compose-dev.yml up -d --force-recreate
