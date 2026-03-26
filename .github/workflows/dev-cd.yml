@@ -56,14 +56,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 8. EC2에 docker-compose-dev.yml 업로드
-      - name: Upload docker-compose to EC2
+      # 8. EC2에 compose / nginx / certbot 디렉터리 업로드
+      - name: Upload deploy files to EC2
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: ./docker-compose-dev.yml
+          source: "docker-compose-dev.yml,nginx/,certbot/"
           target: /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
       # 9. EC2 접속 후 배포 실행
@@ -76,22 +76,12 @@ jobs:
           script: |
             cd /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
-            # 컨테이너 이름 기반으로 종료
-            CONTAINER_NAME=bbangzip-app
-            CONTAINER_ID=$(docker ps -q --filter "name=$CONTAINER_NAME")
-      
-            if [ -n "$CONTAINER_ID" ]; then
-              echo "[INFO] Stopping existing container..."
-              docker stop $CONTAINER_ID
-              docker rm $CONTAINER_ID
-            fi
-
             echo "[INFO] Writing .env file..."
             echo "${{ secrets.ENV_DEV_FILE }}" > .env
             echo "DOCKER_IMAGE_NAME_DEV=${{ secrets.DOCKER_IMAGE_NAME_DEV }}" >> .env
 
-            echo "[INFO] Pulling latest app image..."
-            docker compose -f docker-compose-dev.yml pull app
+            echo "[INFO] Pulling service images..."
+            docker compose -f docker-compose-dev.yml pull
 
-            echo "[INFO] Starting new container (force recreate)..."
+            echo "[INFO] Starting stack (force recreate)..."
             docker compose -f docker-compose-dev.yml up -d --force-recreate
