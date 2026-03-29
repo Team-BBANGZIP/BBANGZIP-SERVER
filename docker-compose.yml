@@ -1,0 +1,80 @@
+services:
+  redis-dev:
+    image: redis:alpine
+    container_name: bbangzip-redis-dev
+    restart: always
+    networks:
+      - bbangzip-network
+
+  redis-prod:
+    image: redis:alpine
+    container_name: bbangzip-redis-prod
+    restart: always
+    networks:
+      - bbangzip-network
+
+  app-dev:
+    image: ${DOCKER_IMAGE_NAME_DEV}
+    container_name: bbangzip-app-dev
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    env_file:
+      - .env.dev
+    depends_on:
+      - redis-dev
+    networks:
+      - bbangzip-network
+
+  app-prod:
+    image: ${DOCKER_IMAGE_NAME_PROD}
+    container_name: bbangzip-app-prod
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    env_file:
+      - .env.prod
+    depends_on:
+      - redis-prod
+    networks:
+      - bbangzip-network
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: bbangzip-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/stack/conf.d:/etc/nginx/conf.d:ro
+      - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+    depends_on:
+      - app-dev
+      - app-prod
+    networks:
+      - bbangzip-network
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: bbangzip-certbot
+    restart: always
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: /bin/sh
+    command:
+      - -c
+      - |
+        trap exit TERM
+        while :; do
+          certbot renew --webroot -w /var/www/certbot --quiet || true
+          sleep 12h & wait $$!
+        done
+    networks:
+      - bbangzip-network
+
+networks:
+  bbangzip-network:
+    external: true
