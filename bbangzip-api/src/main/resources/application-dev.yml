@@ -10,7 +10,7 @@ spring:
 
   data:
     redis:
-      host: redis
+      host: redis-dev
       port: 6379
       timeout: 6000
 
