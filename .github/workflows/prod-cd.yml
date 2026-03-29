@@ -23,7 +23,7 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build Docker image
+      - name: Build Docker image (prod)
         run: |
           echo "[INFO] Removing Docker cache..."
           docker builder prune -af || true
@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push image to Docker Hub
+      - name: Push prod image to Docker Hub
         run: docker push ${{ secrets.DOCKER_IMAGE_NAME_PROD }}
 
   deploy:
@@ -55,27 +55,29 @@ jobs:
           host: ${{ secrets.EC2_HOST_PROD || secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose-prod.yml,nginx/,certbot/"
-          target: /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME_PROD || 'bbangzip-prod' }}
+          source: "docker-compose.yml,nginx/,certbot/"
+          target: /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
-      - name: SSH & Deploy to EC2
+      - name: SSH & Deploy unified stack to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST_PROD || secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME_PROD || 'bbangzip-prod' }}
+            cd /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
-            echo "[INFO] Writing .env file..."
-            echo "${{ secrets.ENV_PROD_FILE }}" > .env
+            echo "[INFO] Writing compose .env and app env files..."
+            echo "DOCKER_IMAGE_NAME_DEV=${{ secrets.DOCKER_IMAGE_NAME_DEV }}" > .env
             echo "DOCKER_IMAGE_NAME_PROD=${{ secrets.DOCKER_IMAGE_NAME_PROD }}" >> .env
+            echo "${{ secrets.ENV_DEV_FILE }}" > .env.dev
+            echo "${{ secrets.ENV_PROD_FILE }}" > .env.prod
 
             echo "[INFO] Ensuring docker network exists..."
-            docker network create bbangzip-prod-network 2>/dev/null || true
+            docker network create bbangzip-network 2>/dev/null || true
 
             echo "[INFO] Pulling service images..."
-            docker compose -f docker-compose-prod.yml pull
+            docker compose -f docker-compose.yml pull
 
-            echo "[INFO] Starting stack (force recreate)..."
-            docker compose -f docker-compose-prod.yml up -d --force-recreate
+            echo "[INFO] Starting unified stack (dev + prod)..."
+            docker compose -f docker-compose.yml up -d --force-recreate
