@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://bbangzip-db.cfcgs6kiy5mn.ap-northeast-2.rds.amazonaws.com:3306/bbangzip
+    url: jdbc:mysql://bbangzip-db.cfcgs6kiy5mn.ap-northeast-2.rds.amazonaws.com:3306/bbangzip-dev?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
@@ -16,7 +16,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       show-sql: false
 
   security:
