@@ -17,10 +17,12 @@ WORKDIR /app
 # 빌드 결과물 JAR 복사
 COPY --from=build /app/bbangzip-api/build/libs/bbangzip.jar app.jar
 
-# dev 설정 복사 (멀티모듈 대응)
+# 프로필별 설정 (런타임 --spring.profiles.active 와 매칭)
 COPY --from=build /app/bbangzip-api/src/main/resources/application-dev.yml /app/application-dev.yml
+COPY --from=build /app/bbangzip-api/src/main/resources/application-prod.yml /app/application-prod.yml
+
+ENV SPRING_PROFILES_ACTIVE=dev
 
 EXPOSE 8080
 
-# 실행 명령에 config 설정도 포함
-CMD ["java", "-jar", "app.jar", "--spring.profiles.active=dev"]
+CMD ["sh", "-c", "exec java -jar /app/app.jar --spring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
