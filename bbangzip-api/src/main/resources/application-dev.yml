@@ -57,3 +57,9 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-token-expire-time: ${JWT_ACCESS_TOKEN_EXPIRE_TIME}
   refresh-token-expire-time: ${JWT_REFRESH_TOKEN_EXPIRE_TIME}
+
+# 선택: 가입 알림 테스트 시 EC2 `.env.dev` 또는 `ENV_DEV_FILE`에 DISCORD_SIGNUP_WEBHOOK_URL=...
+# prod 채널과 분리하려면 디스코드에서 테스트용 웹훅 URL을 따로 쓰는 것을 권장.
+discord:
+  signup:
+    webhook-url: ${DISCORD_SIGNUP_WEBHOOK_URL:}
