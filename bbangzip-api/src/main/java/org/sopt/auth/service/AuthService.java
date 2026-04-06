@@ -26,9 +26,11 @@ import org.sopt.jwt.auth.dto.ReissueTokensRes;
 import org.sopt.user.domain.UserEntity;
 import org.sopt.user.service.UserOnboardingService;
 import org.sopt.user.type.RegisterStatus;
+import org.sopt.auth.event.SignUpCompletedEvent;
 import org.sopt.user.facade.UserFacade;
 import org.sopt.userbread.facade.UserBreadFacade;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -51,6 +53,7 @@ public class AuthService {
     private final UserFacade userFacade;
     private final UserBreadFacade userBreadFacade;
     private final UserOnboardingService userOnboardingService;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * 소셜 로그인
@@ -184,7 +187,7 @@ public class AuthService {
        userBreadFacade.unlockSaltBreadOnSignUp(userId);
        userOnboardingService.createDefaultsFor(userId);
 
-       return;
+       eventPublisher.publishEvent(new SignUpCompletedEvent(userId, req.nickname()));
     }
 
     @Transactional
