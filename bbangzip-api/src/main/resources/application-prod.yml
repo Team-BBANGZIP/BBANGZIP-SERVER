@@ -57,3 +57,7 @@ jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-token-expire-time: ${JWT_ACCESS_TOKEN_EXPIRE_TIME}
   refresh-token-expire-time: ${JWT_REFRESH_TOKEN_EXPIRE_TIME}
+
+discord:
+  signup:
+    webhook-url: ${DISCORD_SIGNUP_WEBHOOK_URL:}
