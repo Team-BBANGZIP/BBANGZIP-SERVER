@@ -36,7 +36,10 @@ public class User {
                 .isDeleted(userEntity.getIsDeleted())
                 .nickname(userEntity.getNickname())
                 .profileImage(userEntity.getProfileImage())
-                .commitmentMessage(userEntity.getCommitmentMessage())
+                .commitmentMessage(
+                        userEntity.getCommitmentMessage() == null
+                                ? UserEntity.DEFAULT_COMMITMENT_MESSAGE
+                                : userEntity.getCommitmentMessage())
                 .notificationEnabled(userEntity.getNotificationEnabled())
                 .weekStart(userEntity.getWeekStart())
                 .totalBreadCount(userEntity.getTotalBreadCount())
