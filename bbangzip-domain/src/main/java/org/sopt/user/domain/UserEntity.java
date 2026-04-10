@@ -18,6 +18,9 @@ import static org.sopt.user.domain.UserTableConstants.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserEntity extends BaseTimeEntity {
 
+    /** 다짐 메시지가 null일 때 저장·조회에 사용되는 기본 문구 */
+    public static final String DEFAULT_COMMITMENT_MESSAGE = "나만의 다짐을 적어보세요";
+
     @Id
     @Column(name = COLUMN_ID)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,8 +52,9 @@ public class UserEntity extends BaseTimeEntity {
     @Column(name = COLUMN_PROFILE_IMAGE)
     private String profileImage;
 
-    @Column(name = COLUMN_COMMITMENT_MESSAGE)
-    private String commitmentMessage;
+    @Builder.Default
+    @Column(name = COLUMN_COMMITMENT_MESSAGE, length = 50)
+    private String commitmentMessage = DEFAULT_COMMITMENT_MESSAGE;
 
     @Builder.Default
     @Column(name = COLUMN_NOTIFICATION_ENABLED, nullable = false)
@@ -65,13 +69,15 @@ public class UserEntity extends BaseTimeEntity {
     private int totalBreadCount = 0;
 
     public void updateCommitmentMessage(String message) {
-        this.commitmentMessage = message;
+        this.commitmentMessage = message == null ? DEFAULT_COMMITMENT_MESSAGE : message;
     }
 
     public void updateProfile(String nickname, String profileImage, String commitmentMessage) {
         if (nickname != null) this.nickname = nickname;
         if (profileImage != null) this.profileImage = profileImage;
-        if (commitmentMessage != null) this.commitmentMessage = commitmentMessage;
+        if (commitmentMessage != null) {
+            this.commitmentMessage = commitmentMessage;
+        }
     }
 
     public User toDomain() {
@@ -84,7 +90,8 @@ public class UserEntity extends BaseTimeEntity {
                 .isDeleted(false)
                 .nickname(nickname)
                 .profileImage(profileImage)
-                .commitmentMessage(commitmentMessage)
+                .commitmentMessage(
+                        commitmentMessage == null ? DEFAULT_COMMITMENT_MESSAGE : commitmentMessage)
                 .notificationEnabled(true)
                 .weekStart("mon")
                 .totalBreadCount(0)
