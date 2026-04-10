@@ -69,6 +69,14 @@ public class TodoFacade {
         return todoRetriever.countCompletedByUserIdAndDate(userId, date);
     }
 
+    public int countTotalVisibleByUserIdAndDate(Long userId, LocalDate date, List<Long> visibleCategoryIds) {
+        return todoRetriever.countTotalByUserIdAndDateAndCategoryIds(userId, date, visibleCategoryIds);
+    }
+
+    public int countCompletedVisibleByUserIdAndDate(Long userId, LocalDate date, List<Long> visibleCategoryIds) {
+        return todoRetriever.countCompletedByUserIdAndDateAndCategoryIds(userId, date, visibleCategoryIds);
+    }
+
     public LocalDate targetDateOf(Long todoId, Long userId) {
         return todoRetriever.findByIdAndUserId(todoId, userId)
                 .map(TodoEntity::getTargetDate)
@@ -84,9 +92,9 @@ public class TodoFacade {
 
         todoRemover.remove(userId, todoId);
 
-        //  해당 날짜 기준으로 남은 개수 계산
-        int completedCount = todoRetriever.countCompletedByUserIdAndDate(userId, targetDate);
-        int totalCount = todoRetriever.countTotalByUserIdAndDate(userId, targetDate);
+        List<Long> visibleCategoryIds = categoryRetriever.findVisibleCategoryIdsForTodoDate(userId, targetDate);
+        int completedCount = todoRetriever.countCompletedByUserIdAndDateAndCategoryIds(userId, targetDate, visibleCategoryIds);
+        int totalCount = todoRetriever.countTotalByUserIdAndDateAndCategoryIds(userId, targetDate, visibleCategoryIds);
 
         return new TodoDeleteResult(completedCount, totalCount);
     }
