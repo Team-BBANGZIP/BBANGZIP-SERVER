@@ -83,7 +83,16 @@ public class CategoryEntity extends BaseTimeEntity {
     public void update(String newName, CategoryColor newColor, Boolean newIsStopped, int order) {
         if (newName != null) this.name = newName;
         if (newColor != null) this.color = newColor;
-        if (newIsStopped != null) this.isStopped = newIsStopped;
+        if (newIsStopped != null) {
+            if (newIsStopped) {
+                if (!this.isStopped) {
+                    this.stoppedDate = LocalDateTime.now();
+                }
+            } else {
+                this.stoppedDate = null;
+            }
+            this.isStopped = newIsStopped;
+        }
         this.order = order;
     }
 
