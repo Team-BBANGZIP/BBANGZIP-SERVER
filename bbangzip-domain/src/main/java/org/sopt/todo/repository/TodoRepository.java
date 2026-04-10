@@ -24,7 +24,6 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     SELECT t FROM TodoEntity t
     WHERE t.category.id = :categoryId
       AND t.targetDate = :date
-      AND t.category.isStopped = false
 """)
     List<TodoEntity> findByCategoryAndDate(Long categoryId, LocalDate date);
 
@@ -32,7 +31,6 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
         SELECT t FROM TodoEntity t
         WHERE t.category.id IN :categoryIds
           AND t.targetDate = :date
-          AND t.category.isStopped = false
         ORDER BY t.category.id, t.order ASC
 """)
     List<TodoEntity> findByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date);
@@ -44,6 +42,29 @@ public interface TodoRepository extends JpaRepository<TodoEntity, Long> {
     // 특정 날짜의 완료된 투두 개수
     @Query("SELECT COUNT(t) FROM TodoEntity t WHERE t.category.user.id = :userId AND t.targetDate = :targetDate AND t.isCompleted = true")
     int countCompletedByUserIdAndDate(@Param("userId") Long userId, @Param("targetDate") LocalDate targetDate);
+
+    @Query("""
+        SELECT COUNT(t) FROM TodoEntity t
+        WHERE t.category.user.id = :userId
+          AND t.targetDate = :targetDate
+          AND t.category.id IN :categoryIds
+        """)
+    int countTotalByUserIdAndDateAndCategoryIdIn(
+            @Param("userId") Long userId,
+            @Param("targetDate") LocalDate targetDate,
+            @Param("categoryIds") List<Long> categoryIds);
+
+    @Query("""
+        SELECT COUNT(t) FROM TodoEntity t
+        WHERE t.category.user.id = :userId
+          AND t.targetDate = :targetDate
+          AND t.isCompleted = true
+          AND t.category.id IN :categoryIds
+        """)
+    int countCompletedByUserIdAndDateAndCategoryIdIn(
+            @Param("userId") Long userId,
+            @Param("targetDate") LocalDate targetDate,
+            @Param("categoryIds") List<Long> categoryIds);
 
     // 투두 삭제 (유저 검증 포함)
     @Modifying
