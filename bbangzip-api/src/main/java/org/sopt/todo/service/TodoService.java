@@ -48,15 +48,15 @@ public class TodoService {
     @Transactional(readOnly = true)
     public TodoListRes getTodosByDate(Long userId, LocalDate date) {
         String commitmentMessage = userFacade.getUserById(userId).getCommitmentMessage();
-        List<Category> activeCategories = categoryFacade.getActiveCategoriesByUserId(userId);
-        List<Long> activeCategoryIds = activeCategories.stream()
+        List<Category> categoriesForDate = categoryFacade.getCategoriesVisibleForTodoDate(userId, date);
+        List<Long> categoryIds = categoriesForDate.stream()
                 .map(Category::getId)
                 .toList();
 
-        List<Todo> todos = todoFacade.getTodosByCategoryIdsAndDate(activeCategoryIds, date);
+        List<Todo> todos = todoFacade.getTodosByCategoryIdsAndDate(categoryIds, date);
 
         // 카테고리별로 그룹화 & 투두 통계 집계
-        List<TodoListRes.Category> categoryDtos = activeCategories.stream()
+        List<TodoListRes.Category> categoryDtos = categoriesForDate.stream()
                 .map(category -> {
                     List<TodoListRes.Category.Todo> todoDtos = todos.stream()
                             .filter(todo -> todo.getCategory().getId().equals(category.getId()))
@@ -102,8 +102,9 @@ public class TodoService {
         todoFacade.updateTodoCompletion(userId, todoId, isCompleted);
 
         LocalDate targetDate = todoFacade.targetDateOf(todoId, userId);
-        int completedCount = todoFacade.countCompletedByUserIdAndDate(userId, targetDate);
-        int totalCount = todoFacade.countTotalByUserIdAndDate(userId, targetDate);
+        List<Long> visibleCategoryIds = categoryFacade.getVisibleCategoryIdsForTodoDate(userId, targetDate);
+        int completedCount = todoFacade.countCompletedVisibleByUserIdAndDate(userId, targetDate, visibleCategoryIds);
+        int totalCount = todoFacade.countTotalVisibleByUserIdAndDate(userId, targetDate, visibleCategoryIds);
 
         return new TodoCompletionRes(todoId, isCompleted, completedCount, totalCount);
     }
