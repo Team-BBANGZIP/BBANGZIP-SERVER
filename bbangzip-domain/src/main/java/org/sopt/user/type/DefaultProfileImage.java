@@ -6,6 +6,7 @@ import org.sopt.user.exception.InvalidProfileImageKeyException;
 import org.sopt.user.exception.UserCoreErrorCode;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Getter
 @RequiredArgsConstructor
@@ -26,5 +27,15 @@ public enum DefaultProfileImage {
                 .findFirst()
                 .orElseThrow(() -> new InvalidProfileImageKeyException(UserCoreErrorCode.INVALID_PROFILE_IMAGE_KEY))
                 .getUrl();
+    }
+
+    public static Optional<Integer> findKeyByUrl(String url) {
+        if (url == null || url.isBlank()) {
+            return Optional.empty();
+        }
+        return Arrays.stream(values())
+                .filter(img -> img.url.equals(url))
+                .map(img -> img.key)
+                .findFirst();
     }
 }
