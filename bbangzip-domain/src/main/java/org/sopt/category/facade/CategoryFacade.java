@@ -6,6 +6,7 @@ import org.sopt.category.domain.CategoryColor;
 import org.sopt.category.domain.CategoryEntity;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -57,6 +58,15 @@ public class CategoryFacade {
                 .stream()
                 .map(CategoryEntity::toDomain)
                 .toList();
+    }
+
+    /** 날짜별 투두 화면에 노출할 카테고리(멈춤 전 날짜까지 멈춘 카테고리 포함) */
+    public List<Category> getCategoriesVisibleForTodoDate(long userId, LocalDate date) {
+        return categoryRetriever.findVisibleForTodoList(userId, date);
+    }
+
+    public List<Long> getVisibleCategoryIdsForTodoDate(long userId, LocalDate date) {
+        return categoryRetriever.findVisibleCategoryIdsForTodoDate(userId, date);
     }
 
     public void deleteAllByUserId(final Long userId) {
