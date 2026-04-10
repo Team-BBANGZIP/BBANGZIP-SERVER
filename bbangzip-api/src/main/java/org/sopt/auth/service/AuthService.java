@@ -181,7 +181,7 @@ public class AuthService {
      */
     @Transactional
     public void signUp(final long userId, final SignUpReq req) {
-       userFacade.updateProfile(userId, req.profileImageKey(), req.nickname(), null);
+       userFacade.updateProfile(userId, req.profileImageKey(), req.nickname(), UserEntity.DEFAULT_COMMITMENT_MESSAGE);
        userFacade.updateRegisterStatus(userId, RegisterStatus.PROFILE_COMPLETED);
 
        userBreadFacade.unlockSaltBreadOnSignUp(userId);
