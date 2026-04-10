@@ -7,6 +7,7 @@ import org.sopt.todo.repository.TodoRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,9 @@ public class TodoRetriever {
     }
 
     public List<Todo> findTodosByCategoryIdsAndDate(List<Long> categoryIds, LocalDate date) {
+        if (categoryIds.isEmpty()) {
+            return Collections.emptyList();
+        }
         List<TodoEntity> entities = todoRepository.findByCategoryIdsAndDate(categoryIds, date);
         return entities.stream()
                 .map(TodoEntity::toDomain)
@@ -33,6 +37,20 @@ public class TodoRetriever {
 
     public int countCompletedByUserIdAndDate(Long userId, LocalDate targetDate) {
         return todoRepository.countCompletedByUserIdAndDate(userId, targetDate);
+    }
+
+    public int countTotalByUserIdAndDateAndCategoryIds(Long userId, LocalDate targetDate, List<Long> categoryIds) {
+        if (categoryIds.isEmpty()) {
+            return 0;
+        }
+        return todoRepository.countTotalByUserIdAndDateAndCategoryIdIn(userId, targetDate, categoryIds);
+    }
+
+    public int countCompletedByUserIdAndDateAndCategoryIds(Long userId, LocalDate targetDate, List<Long> categoryIds) {
+        if (categoryIds.isEmpty()) {
+            return 0;
+        }
+        return todoRepository.countCompletedByUserIdAndDateAndCategoryIdIn(userId, targetDate, categoryIds);
     }
 
     public Optional<TodoEntity> findByIdAndUserId(Long todoId, Long userId) {
