@@ -65,6 +65,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -euo pipefail
             cd /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
             echo "[INFO] Writing compose .env and app env files..."
@@ -76,7 +77,10 @@ jobs:
             echo "[INFO] Ensuring docker network exists..."
             docker network create bbangzip-network 2>/dev/null || true
 
-            echo "[INFO] Pulling service images..."
+            echo "[INFO] Logging in to Docker Hub (pull rate limit / private image)..."
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            echo "[INFO] Pulling service images (fail deploy if pull fails)..."
             docker compose -f docker-compose.yml pull
 
             echo "[INFO] Starting unified stack (dev + prod)..."
