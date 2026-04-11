@@ -64,8 +64,9 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 30m
           script: |
-            set -euo pipefail
+            set -eo pipefail
             cd /home/${{ secrets.EC2_USER }}/apps/${{ secrets.PROJECT_NAME }}
 
             echo "[INFO] Writing compose .env and app env files..."
@@ -85,3 +86,7 @@ jobs:
 
             echo "[INFO] Starting unified stack (dev + prod)..."
             docker compose -f docker-compose.yml up -d --force-recreate
+
+            echo "[INFO] Pruning unused Docker images (free disk; running containers unchanged)..."
+            docker image prune -a -f || true
+            docker builder prune -af 2>/dev/null || true
