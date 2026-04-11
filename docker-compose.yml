@@ -15,6 +15,7 @@ services:
 
   app-dev:
     image: ${DOCKER_IMAGE_NAME_DEV}
+    pull_policy: always
     container_name: bbangzip-app-dev
     restart: always
     environment:
@@ -28,6 +29,7 @@ services:
 
   app-prod:
     image: ${DOCKER_IMAGE_NAME_PROD}
+    pull_policy: always
     container_name: bbangzip-app-prod
     restart: always
     environment:
