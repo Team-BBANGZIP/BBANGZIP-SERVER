@@ -23,6 +23,12 @@ services:
       - .env.dev
     depends_on:
       - redis-dev
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/8080'"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 120s
     networks:
       - bbangzip-network
 
@@ -36,6 +42,12 @@ services:
       - .env.prod
     depends_on:
       - redis-prod
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/8080'"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 120s
     networks:
       - bbangzip-network
 
@@ -51,8 +63,10 @@ services:
       - ./certbot/www:/var/www/certbot:ro
       - ./certbot/conf:/etc/letsencrypt:ro
     depends_on:
-      - app-dev
-      - app-prod
+      app-dev:
+        condition: service_healthy
+      app-prod:
+        condition: service_healthy
     networks:
       - bbangzip-network
 

@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+concurrency:
+  group: bbangzip-unified-stack-deploy
+  cancel-in-progress: false
+
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
@@ -84,8 +88,11 @@ jobs:
             echo "[INFO] Pulling service images (fail deploy if pull fails)..."
             docker compose -f docker-compose.yml pull
 
+            echo "[INFO] Stopping existing unified stack and removing orphans..."
+            docker compose -f docker-compose.yml down --remove-orphans || true
+
             echo "[INFO] Starting unified stack (dev + prod)..."
-            docker compose -f docker-compose.yml up -d --force-recreate
+            docker compose -f docker-compose.yml up -d --force-recreate --remove-orphans
 
             echo "[INFO] Pruning unused Docker images (free disk; running containers unchanged)..."
             docker image prune -a -f || true
