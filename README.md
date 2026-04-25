@@ -37,7 +37,6 @@
 4. 작업 완료 후 빌드가 되는지 확인 후 push합니다.
 5. PR을 작성합니다.
 6. 모든 팀원들의 approve를 받은 후 merge합니다.
-</br>
 
 # 🥯 Branch Strategy
 
@@ -58,7 +57,6 @@
 | **chore** | 빌드, 설정, 패키지 등 기타 작업 |
 | **init** | 초기 설정 및 프로젝트 시작 |
 | **deploy** | 배포 관련 작업 |
-| </br> |  |
 
 # 🥪 Commit Message
 
