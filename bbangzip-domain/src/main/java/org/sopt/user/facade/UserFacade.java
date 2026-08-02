@@ -1,9 +1,11 @@
 package org.sopt.user.facade;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.jwt.auth.authentication.UserRole;
 import org.sopt.user.domain.User;
 import org.sopt.user.domain.UserEntity;
 import org.sopt.user.type.RegisterStatus;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,54 @@ public class UserFacade {
 
     public UserEntity save(final UserEntity user){
         return userSaver.save(user);
+    }
+
+    @Transactional
+    public UserEntity getOrCreateSocialUser(
+            final String provider,
+            final String providerId,
+            final UserRole userRole
+    ) {
+        Optional<UserEntity> existing =
+                userRetriever.findByProviderAndProviderId(provider, providerId);
+
+        if (existing.isPresent()) {
+            UserEntity user = existing.get();
+            if (Boolean.TRUE.equals(user.getIsDeleted())) {
+                user.revertDeleteUser();
+            }
+            return user;
+        }
+
+        return createSocialUserSafely(provider, providerId, userRole);
+    }
+
+    private UserEntity createSocialUserSafely(
+            final String provider,
+            final String providerId,
+            final UserRole userRole
+    ) {
+        try {
+            UserEntity user = UserEntity.builder()
+                    .provider(provider)
+                    .providerId(providerId)
+                    .registerStatus(RegisterStatus.SOCIAL_LOGIN_COMPLETED)
+                    .userRole(userRole)
+                    .build();
+            return userSaver.saveAndFlush(user);
+        } catch (DataIntegrityViolationException e) {
+            return userRetriever.findByProviderAndProviderId(provider, providerId)
+                    .map(user -> {
+                        if (Boolean.TRUE.equals(user.getIsDeleted())) {
+                            user.revertDeleteUser();
+                        }
+                        return user;
+                    })
+                    .orElseThrow(() -> new IllegalStateException(
+                            "소셜 로그인 사용자 생성 충돌 후 재조회에 실패했습니다.",
+                            e
+                    ));
+        }
     }
 
     @Transactional
