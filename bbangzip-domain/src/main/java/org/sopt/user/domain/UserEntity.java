@@ -13,7 +13,13 @@ import static org.sopt.user.domain.UserTableConstants.*;
 @Builder
 @Entity
 @Getter
-@Table(name = TABLE_USER)
+@Table(
+        name = TABLE_USER,
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_users_provider_provider_id",
+                columnNames = {COLUMN_PROVIDER, COLUMN_PROVIDER_ID}
+        )
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserEntity extends BaseTimeEntity {
@@ -81,23 +87,7 @@ public class UserEntity extends BaseTimeEntity {
     }
 
     public User toDomain() {
-        return User.builder()
-                .id(id)
-                .userRole(userRole)
-                .provider(provider)
-                .providerId(providerId)
-                .registerStatus(registerStatus)
-                .isDeleted(false)
-                .nickname(nickname)
-                .profileImage(profileImage)
-                .commitmentMessage(
-                        commitmentMessage == null ? DEFAULT_COMMITMENT_MESSAGE : commitmentMessage)
-                .notificationEnabled(true)
-                .weekStart("mon")
-                .totalBreadCount(0)
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
-                .build();
+        return User.fromEntity(this);
     }
 
     public void increaseTotalBreadCount(int delta) {
