@@ -36,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.sopt.jwt.auth.domain.type.AuthProvider.KAKAO;
 
@@ -125,32 +124,12 @@ public class AuthService {
     }
 
     private SocialLoginRes findUserAndIssueToken(String providerId, SocialLoginReq req) {
-        UserEntity user;
-        Optional<UserEntity> optionalUser = userFacade.getByProviderAndProviderId(String.valueOf(req.provider()), providerId);
-
-        // 이미 유저가 존재하는 경우
-        if(optionalUser.isPresent()) {
-            user = optionalUser.get();
-
-            if(optionalUser.get().getIsDeleted()) {
-                // 탈퇴한 회원인 경우 다시 회원 자격 복구
-                user.revertDeleteUser();
-            }
-
-            // 이미 가입된 유저 토큰 재발급(= 초기 유저와 동일한 로직)
-            return tokenService.issueToken(req, user.getId(), user.getRegisterStatus());
-
-        } else {
-            user = UserEntity.builder()
-                    .provider(String.valueOf(req.provider()))
-                    .providerId(providerId)
-                    .registerStatus(RegisterStatus.SOCIAL_LOGIN_COMPLETED)
-                    .userRole(UserRole.USER)
-                    .build();
-
-            UserEntity newUser = userFacade.save(user);
-            return tokenService.issueToken(req, newUser.getId(), RegisterStatus.SOCIAL_LOGIN_COMPLETED);
-        }
+        UserEntity user = userFacade.getOrCreateSocialUser(
+                String.valueOf(req.provider()),
+                providerId,
+                UserRole.USER
+        );
+        return tokenService.issueToken(req, user.getId(), user.getRegisterStatus());
     }
 
     /**
