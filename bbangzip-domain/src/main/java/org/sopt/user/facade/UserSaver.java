@@ -14,4 +14,8 @@ public class UserSaver {
     public UserEntity save(final UserEntity user){
         return userRepository.save(user);
     }
+
+    public UserEntity saveAndFlush(final UserEntity user) {
+        return userRepository.saveAndFlush(user);
+    }
 }
