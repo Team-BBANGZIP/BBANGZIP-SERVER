@@ -45,6 +45,4 @@ jobs:
 
       # 6. Gradle 빌드 및 테스트 실행
       - name: Build bootJar for API module
-        run: |
-          rm -rf ~/.gradle/caches
-          ./gradlew clean :bbangzip-api:bootJar --no-daemon
+        run: ./gradlew clean :bbangzip-api:bootJar --no-daemon
