@@ -6,8 +6,8 @@ public record BreadListRes(
         int totalCount,
         List<BreadSummaryRes> breadList
 ) {
-    public static BreadListRes of(List<BreadSummaryRes> list) {
-        return new BreadListRes(list.size(), list);
+    public static BreadListRes of(int totalCount, List<BreadSummaryRes> list) {
+        return new BreadListRes(totalCount, list);
     }
 
     public record BreadSummaryRes(
