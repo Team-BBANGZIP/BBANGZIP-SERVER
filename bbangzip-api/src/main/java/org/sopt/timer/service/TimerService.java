@@ -70,6 +70,8 @@ public class TimerService {
 
     @Transactional(readOnly = true)
     public BreadListRes getBreadList(Long userId) {
+        UserEntity user = userFacade.getUserEntityById(userId);
+        int totalBreadCount = user.getTotalBreadCount();
         List<BreadEntity> breads = breadFacade.findAll();
 
         Map<Long, Boolean> unlockedMap = userBreadFacade.findAllByUserId(userId).stream()
@@ -81,7 +83,9 @@ public class TimerService {
 
         List<BreadListRes.BreadSummaryRes> list = breads.stream()
                 .map(b -> {
-                    boolean isUnlocked = unlockedMap.getOrDefault(b.getId(), b.getRequiredCount() == 0);
+                    boolean unlockedByUserBread = Boolean.TRUE.equals(unlockedMap.get(b.getId()));
+                    boolean unlockedByProgress = totalBreadCount >= b.getRequiredCount();
+                    boolean isUnlocked = unlockedByUserBread || unlockedByProgress;
                     return new BreadListRes.BreadSummaryRes(
                             b.getId(),
                             b.getName(),
@@ -92,7 +96,7 @@ public class TimerService {
                 })
                 .toList();
 
-        return BreadListRes.of(list);
+        return BreadListRes.of(totalBreadCount, list);
     }
 
     /**
